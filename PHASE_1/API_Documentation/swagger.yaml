@@ -1,0 +1,112 @@
+swagger: "2.0"
+info:
+  description: "This is the documentation for the scraper API [CHANGE THIS]."
+  version: "1.0.0"
+  title: "Epidemic Scraper"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "TODO.COM"
+basePath: "/v2"
+tags:
+- name: "test tag"
+  description: "Tag description"
+  externalDocs:
+    description: "External doc link"
+    url: "http://swagger.io"
+schemes:
+- "https"
+- "http"
+paths:
+  /apiTest:
+    post:
+      tags:
+      - "test tag"
+      summary: "Test the api"
+      description: "This tests the API"
+      operationId: "postApiTest"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "JSON/XML data description"
+        required: true
+        schema:
+          $ref: "#/definitions/TestType"
+      responses:
+        "405":
+          description: "Invalid input"
+      security: 
+        - test_auth: [
+          "write:test",
+          "read:test"
+          ]
+securityDefinitions:
+  test_auth:
+    type: "oauth2"
+    authorizationUrl: "SOMEWHERE.com/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:test: "modify something in your account"
+      read:test: "read something"
+definitions:
+  Category:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Category"
+  Tag:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Tag"
+  TestType:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      category:
+        $ref: "#/definitions/Category"
+      name:
+        type: "string"
+        example: "funnyString"
+      tags:
+        type: "array"
+        xml:
+          name: "tag"
+          wrapped: true
+        items:
+          $ref: "#/definitions/Tag"
+      status:
+        type: "string"
+        description: "enum status"
+        enum:
+        - "available"
+        - "pending"
+        - "sold"
+    xml:
+      name: "TestType"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
