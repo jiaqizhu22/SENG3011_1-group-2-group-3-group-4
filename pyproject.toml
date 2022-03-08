@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "seng3011_1-group-2-group-3-group-4"
 version = "0.1.0"
-description = ""
-authors = ["Hoshang <z5255679@cse.unsw.edu.au>"]
+description = "Web Scraper"
+authors = ["Hoshang, Jiaqi, Joel, Lachlan, William"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
