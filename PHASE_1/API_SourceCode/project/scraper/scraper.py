@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import lxml
 import pandas as pd
 import json
 import os
@@ -25,7 +24,7 @@ def get_outbreak_news(url):
     return date, title
 
 # func to return all the text in article
-def get_article_text(url)
+def get_article_text(url):
 
     headers = {}
 
@@ -40,4 +39,4 @@ def get_article_text(url)
     #risk_assessment = soup.select_all(selector=".full-title").get_text().strip()
     #advice = soup.select_all(selector=".full-title").get_text().strip()
 
-    return background, response, risk_assessment, advice
+    return background #response, risk_assessment, advice
