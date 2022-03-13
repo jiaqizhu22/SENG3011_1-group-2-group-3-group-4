@@ -1,5 +1,3 @@
-
-
 disease_list = [
 { "name": "unknown" },
 { "name": "other" },
@@ -197,34 +195,3 @@ for pageNum in range(4,5): #change this for the amount of pages to check. if its
 df = pd.DataFrame(lstBasicInfo)
 
 #print(df) #pandas dataframe
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
