@@ -1,42 +1,46 @@
+#IF required we can add the entire body section of the thing into the dictionary but for now it just has those 4 fields
 import requests
 from bs4 import BeautifulSoup
+import re
 import pandas as pd
-import json
-import os
 
-#url = "https://www.who.int/emergencies/disease-outbreak-news"
+lstBasicInfo = []
+for pageNum in range(0,150): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
+    counter = 0
+    URL = "https://www.who.int/emergencies/disease-outbreak-news/"+str(pageNum) #iterates over the pages
+    print(URL)
+    page = requests.get(URL)
+    soup = BeautifulSoup(page.content, "html.parser")
 
-def get_outbreak_news(url): 
+    outbreakTitle = soup.find_all("h4", {"class": "sf-list-vertical__title"}) #title and info
+    outbreakLink = soup.find_all("a", {"class": "sf-list-vertical__item"}) #link
 
-    headers = {}
+    for c, i in enumerate(outbreakTitle): #loop between the info
+        splited = re.split('>|<',str(i))
+        
+        dl = re.split('- |– | ｰ',str(splited[4]))
+        location = dl[1].strip()
+        disease = dl[0].strip()
+        date = splited[8][:-3]
+        url = str(outbreakLink[c]).split("\"")[3]
+        currentPage = BeautifulSoup(requests.get(url).content, "html.parser")
+        if len(disease) == 4 and disease.isnumeric(): #if the entry is using the old schema, then do this to get the disease
+            disease1 = re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"}))))[16]
+            disease2 = re.split('- |– | ｰ|in ',str(disease1))
+            disease = disease2[0] 
 
-    r = requests.get(url, headers=headers)
+        BasicInfoDict = { #making dict of the info. 
+          "date": date,
+          "disease": disease,
+          "location": location,
+          "URL":url,
+        }
+        lstBasicInfo.append(BasicInfoDict) #appending the dicts into the list
+        if len(BasicInfoDict) == 0: #stops the loop when it reaches the end
+            break
 
-    soup = BeautifulSoup(r.text, "lxml")
-    print(soup.prettify())
+#print(lstBasicInfo) #debug
 
-    name = soup.select_all(selector=".full-title").get_text()
-    name = name.strip() # removes white spaces
-    # Test
-    print(name)
-    date, title = name.split('|') #does this split the date and title with '|' delimiter?
+df = pd.DataFrame(lstBasicInfo)
 
-    return date, title
-
-# func to return all the text in article
-def get_article_text(url):
-
-    headers = {}
-
-    r = requests.get(url, headers=headers)
-
-    soup = BeautifulSoup(r.text, "lxml")
-    print(soup.prettify())
-
-    # Work out how to access each text section... if we cant do it this way then grab all of it and we can split the text
-    background = soup.select_all(selector=".sf-accordion_title").get_text().strip()
-    #response = soup.select_all(selector=".full-title").get_text().strip()
-    #risk_assessment = soup.select_all(selector=".full-title").get_text().strip()
-    #advice = soup.select_all(selector=".full-title").get_text().strip()
-
-    return background #response, risk_assessment, advice
+print(df) #pandas dataframe
