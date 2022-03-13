@@ -102,9 +102,8 @@ def dateConverter(date):
     return (year+"-"+month+"-"+day) 
 
 
-
 lstBasicInfo = []
-for pageNum in range(0,150): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
+for pageNum in range(0,10): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
     counter = 0
     URL = "https://www.who.int/emergencies/disease-outbreak-news/"+str(pageNum) #iterates over the pages
     print(URL)
@@ -118,7 +117,10 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
         splited = re.split('>|<',str(i))
         
         dl = re.split('- |– | ｰ',str(splited[4]))
-        location = dl[1].strip()
+        if (dl[1]):
+            location = dl[1].strip()
+        else:
+            location = ""
         illness = dl[0].strip()
         date = splited[8][:-3]
         date = dateConverter(date)

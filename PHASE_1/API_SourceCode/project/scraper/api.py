@@ -14,7 +14,7 @@ with open('PHASE_1/API_SourceCode/project/scraper/data.json') as json_file:
         reports_list = []
         reports = item['reports']
         print(reports)
-        for r in reports:
+        for r in reports.split(''):
             print(r)
             diseases = r[0]
             syndromes = r[1]
