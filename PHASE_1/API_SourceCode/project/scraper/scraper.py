@@ -160,35 +160,37 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
         locs_list = []
         for location in  re.split(', |and ',str(location)):
             loc_object = {
-              "country": location,
-              "location":"",   #this needs to be sorted out
+                "country": location,
+                "location":"",   #this needs to be sorted out
             }
             locs_list.append(loc_object)
 
         report = {
-          "diseases": diseases,
-          "syndromes": syndromes,
-          "event_date":"", #this needs to be sorted out
-          "locations":locs_list,  
+            "diseases": diseases,
+            "syndromes": syndromes,
+            "event_date":"", #this needs to be sorted out
+            "locations":locs_list,  
         }
 
             
         article = { #making dict of the info.
-          "url":url,
-          "date_of_publication": date,
-          "headline": headline,
-          "main_text":main_text,
-          "reports":report,
+            "url":url,
+            "date_of_publication": date,
+            "headline": headline,
+            "main_text":main_text,
+            "reports":report,
         }
         lstBasicInfo.append(article) #appending the dicts into the list
         if len(article) == 0: #stops the loop when it reaches the end
             break
 
-        
-        print(json.dumps(article, indent=2)) #pretty print json to look at
+        with open('data.json', 'w') as f:
+            json.dump(lstBasicInfo, f)
+
+        #print(json.dumps(article, indent=2)) #pretty print json to look at
 
         
-        print()
+        #print()
 
 #print(lstBasicInfo) #debug
 
