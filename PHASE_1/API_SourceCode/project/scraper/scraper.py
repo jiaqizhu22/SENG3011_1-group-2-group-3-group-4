@@ -102,9 +102,8 @@ def dateConverter(date):
     return (year+"-"+month+"-"+day) 
 
 
-
 lstBasicInfo = []
-for pageNum in range(0,150): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
+for pageNum in range(12,13): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
     counter = 0
     URL = "https://www.who.int/emergencies/disease-outbreak-news/"+str(pageNum) #iterates over the pages
     print(URL)
@@ -116,9 +115,9 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
 
     for c, i in enumerate(outbreakTitle): #loop between the info
         splited = re.split('>|<',str(i))
-        
         dl = re.split('- |– | ｰ',str(splited[4]))
-        location = dl[1].strip()
+
+            
         illness = dl[0].strip()
         date = splited[8][:-3]
         date = dateConverter(date)
@@ -131,6 +130,13 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
             illness1 = re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"}))))[16]
             illness2 = re.split('- |– | ｰ|in ',str(illness1))
             illness = illness2[0] 
+
+        try:
+            country = dl[1].strip()
+        except:
+            t1 = re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"}))))[16]
+            t2 = re.split('- |– | ｰ|in ',str(t1))
+            country = t2[1] 
 
         #checking is illness is disease or syndrome
         check = 0
@@ -158,37 +164,39 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
 
         #main_text = currentPage.find_all("article", {"class": "sf-detail-body-wrapper"})
         locs_list = []
-        for location in  re.split(', |and ',str(location)):
+        for country in  re.split(', |and ',str(country)):
             loc_object = {
-              "country": location,
-              "location":"",   #this needs to be sorted out
+                "country": country,
+                "location":"",   #this needs to be sorted out
             }
             locs_list.append(loc_object)
 
         report = {
-          "diseases": diseases,
-          "syndromes": syndromes,
-          "event_date":"", #this needs to be sorted out
-          "locations":locs_list,  
+            "diseases": diseases,
+            "syndromes": syndromes,
+            "event_date":"", #this needs to be sorted out
+            "locations":locs_list,  
         }
 
             
         article = { #making dict of the info.
-          "url":url,
-          "date_of_publication": date,
-          "headline": headline,
-          "main_text":main_text,
-          "reports":report,
+            "url":url,
+            "date_of_publication": date,
+            "headline": headline,
+            "main_text":main_text,
+            "reports":report,
         }
         lstBasicInfo.append(article) #appending the dicts into the list
         if len(article) == 0: #stops the loop when it reaches the end
             break
 
-        
+        with open('data.json', 'w') as f:
+            json.dump(lstBasicInfo, f)
+
         print(json.dumps(article, indent=2)) #pretty print json to look at
 
         
-        print()
+        #print()
 
 #print(lstBasicInfo) #debug
 
