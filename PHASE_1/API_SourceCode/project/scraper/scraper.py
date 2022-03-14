@@ -103,11 +103,7 @@ def dateConverter(date):
 
 
 lstBasicInfo = []
-<<<<<<< HEAD
-for pageNum in range(0,10): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
-=======
 for pageNum in range(12,13): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
->>>>>>> main
     counter = 0
     URL = "https://www.who.int/emergencies/disease-outbreak-news/"+str(pageNum) #iterates over the pages
     print(URL)
@@ -120,15 +116,8 @@ for pageNum in range(12,13): #change this for the amount of pages to check. if i
     for c, i in enumerate(outbreakTitle): #loop between the info
         splited = re.split('>|<',str(i))
         dl = re.split('- |– | ｰ',str(splited[4]))
-<<<<<<< HEAD
-        if (dl[1]):
-            location = dl[1].strip()
-        else:
-            location = ""
-=======
 
             
->>>>>>> main
         illness = dl[0].strip()
         date = splited[8][:-3]
         date = dateConverter(date)
@@ -177,11 +166,7 @@ for pageNum in range(12,13): #change this for the amount of pages to check. if i
         locs_list = []
         for country in  re.split(', |and ',str(country)):
             loc_object = {
-<<<<<<< HEAD
-                "country": location,
-=======
                 "country": country,
->>>>>>> main
                 "location":"",   #this needs to be sorted out
             }
             locs_list.append(loc_object)
@@ -208,11 +193,7 @@ for pageNum in range(12,13): #change this for the amount of pages to check. if i
         with open('data.json', 'w') as f:
             json.dump(lstBasicInfo, f)
 
-<<<<<<< HEAD
-        #print(json.dumps(article, indent=2)) #pretty print json to look at
-=======
         print(json.dumps(article, indent=2)) #pretty print json to look at
->>>>>>> main
 
         
         #print()
