@@ -27,13 +27,13 @@
   ],
   "paths": {
     "/search": {
-      "post": {
+      "get": {
         "tags": [
           "Search"
         ],
         "summary": "Search for articles",
         "description": "This endpoint allows users to search for articles",
-        "operationId": "postSearch",
+        "operationId": "getSearch",
         "consumes": [
           "application/json"
         ],
