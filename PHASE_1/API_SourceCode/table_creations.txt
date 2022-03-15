@@ -1,0 +1,57 @@
+CREATE TABLE Article (
+	_id INTEGER PRIMARY KEY,
+   	url STRING NOT NULL,
+	date_of_publication datetime NOT NULL,
+    headline STRING NOT NULL,
+    main_text STRING NOT NULL
+);
+
+CREATE TABLE Reports (
+    report_id STRING PRIMARY KEY,
+    parent_id STRING NOT NULL,
+    event_date datetime NOT NULL,
+    FOREIGN KEY (parent_id)
+        REFERENCES Article(_id)
+);
+
+CREATE TABLE Diseases (
+    disease_id INTEGER PRIMARY KEY,
+    name STRING NOT NULL
+);
+
+CREATE TABLE Syndromes (
+    syndrome_id INTEGER PRIMARY KEY,
+    name STRING NOT NULL
+);
+
+CREATE TABLE Report_diseases (
+    disease_id INTEGER NOT NULL,
+    report_id STRING NOT NULL,
+    FOREIGN KEY (disease_id)
+        REFERENCES Diseases(disease_id),
+    FOREIGN KEY (report_id)
+        REFERENCES Reports(report_id)
+);
+
+CREATE TABLE Report_syndromes (
+    syndrome_id INTEGER NOT NULL,
+    report_id STRING NOT NULL,
+    FOREIGN KEY (syndrome_id)
+        REFERENCES Syndromes(syndrome_id),
+    FOREIGN KEY (report_id)
+        REFERENCES Reports(report_id)
+);
+
+CREATE TABLE Locations (
+    place_id INTEGER NOT NULL,
+    report_id STRING NOT NULL,
+    FOREIGN KEY (place_id)
+        REFERENCES Places(place_id),
+    FOREIGN KEY (report_id)
+        REFERENCES Reports(report_id)
+);
+
+CREATE TABLE Places (
+    place_id INTEGER PRIMARY KEY,
+    place_name STRING NOT NULL
+);
