@@ -14,7 +14,7 @@ How to Install poetry locally:
 How to use poetry to install packages:
 `poetry install` 
 To add a package into poetry, run: 
-`poetry add <package_name>` 
+`poetry add <package_name>`
 
 
 ## React Frontend
