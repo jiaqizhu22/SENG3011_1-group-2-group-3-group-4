@@ -39,6 +39,15 @@ Run frontend:
 - Update local feature branch: 
 `git rebase main` 
 
+## Starting Swagger API: index.html page
+- Locating to folder:
+`cd PHASE_1/API_SourceCode/`
+- Run poetry virtual environment:
+`poetry shell`
+- Update all packages:
+`poetry update`
+- Running server
+`python manage.py runserver`
 
 
 

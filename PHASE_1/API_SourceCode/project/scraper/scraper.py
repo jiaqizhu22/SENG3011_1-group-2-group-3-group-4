@@ -1,87 +1,87 @@
-disease_list = [
-{ "name": "unknown" },
-{ "name": "other" },
-{ "name": "anthrax cutaneous" },
-{ "name": "anthrax gastrointestinous" },
-{ "name": "anthrax inhalation" },
-{ "name": "botulism" },
-{ "name": "brucellosis" },
-{ "name": "chikungunya" },
-{ "name": "cholera" },
-{ "name": "cryptococcosis" },
-{ "name": "cryptosporidiosis" },
-{ "name": "crimean-congo haemorrhagic fever" },
-{ "name": "dengue" },
-{ "name": "diphteria" },
-{ "name": "ebola haemorrhagic fever" },
-{ "name": "ehec (e.coli)" },
-{ "name": "enterovirus 71 infection" },
-{ "name": "influenza a/h5n1" },
-{ "name": "influenza a/h7n9" },
-{ "name": "influenza a/h9n2" },
-{ "name": "influenza a/h1n1" },
-{ "name": "influenza a/h1n2" },
-{ "name": "influenza a/h3n5" },
-{ "name": "influenza a/h3n2" },
-{ "name": "influenza a/h2n2" },
-{ "name": "hand, foot and mouth disease" },
-{ "name": "hantavirus" },
-{ "name": "hepatitis a" },
-{ "name": "hepatitis b" },
-{ "name": "hepatitis c" },
-{ "name": "hepatitis d" },
-{ "name": "hepatitis e" },
-{ "name": "histoplasmosis" },
-{ "name": "hiv/aids" },
-{ "name": "lassa fever" },
-{ "name": "malaria" },
-{ "name": "marburg virus disease" },
-{ "name": "measles" },
-{ "name": "mers-cov" },
-{ "name": "mumps" },
-{ "name": "nipah virus" },
-{ "name": "norovirus infection" },
-{ "name": "pertussis" },
-{ "name": "plague" },
-{ "name": "pneumococcus pneumonia" },
-{ "name": "poliomyelitis" },
-{ "name": "q fever" },
-{ "name": "rabies" },
-{ "name": "rift valley fever" },
-{ "name": "rotavirus infection" },
-{ "name": "rubella" },
-{ "name": "salmonellosis" },
-{ "name": "sars" },
-{ "name": "shigellosis" },
-{ "name": "smallpox" },
-{ "name": "staphylococcal enterotoxin b" },
-{ "name": "thypoid fever" },
-{ "name": "tuberculosis" },
-{ "name": "tularemia" },
-{ "name": "vaccinia and cowpox" },
-{ "name": "varicella" },
-{ "name": "west nile virus" },
-{ "name": "yellow fever" },
-{ "name": "yersiniosis" },
-{ "name": "zika" },
-{ "name": "legionares" },
-{ "name": "listeriosis" },
-{ "name": "monkeypox" },
-{ "name": "COVID-19" }
-]
+disease_set = {
+    "unknown",
+    "other",
+    "anthrax cutaneous",
+    "anthrax gastrointestinous",
+    "anthrax inhalation",
+    "botulism",
+    "brucellosis",
+    "chikungunya",
+    "cholera",
+    "cryptococcosis",
+    "cryptosporidiosis",
+    "crimean-congo haemorrhagic fever",
+    "dengue",
+    "diphteria",
+    "ebola haemorrhagic fever",
+    "ehec (e.coli)",
+    "enterovirus 71 infection",
+    "influenza a/h5n1",
+    "influenza a/h7n9",
+    "influenza a/h9n2",
+    "influenza a/h1n1",
+    "influenza a/h1n2",
+    "influenza a/h3n5",
+    "influenza a/h3n2",
+    "influenza a/h2n2",
+    "hand, foot and mouth disease",
+    "hantavirus",
+    "hepatitis a",
+    "hepatitis b",
+    "hepatitis c",
+    "hepatitis d",
+    "hepatitis e",
+    "histoplasmosis",
+    "hiv/aids",
+    "lassa fever",
+    "malaria",
+    "marburg virus disease",
+    "measles",
+    "mers-cov",
+    "mumps",
+    "nipah virus",
+    "norovirus infection",
+    "pertussis",
+    "plague",
+    "pneumococcus pneumonia",
+    "poliomyelitis",
+    "q fever",
+    "rabies",
+    "rift valley fever",
+    "rotavirus infection",
+    "rubella",
+    "salmonellosis",
+    "sars",
+    "shigellosis",
+    "smallpox",
+    "staphylococcal enterotoxin b",
+    "thypoid fever",
+    "tuberculosis",
+    "tularemia",
+    "vaccinia and cowpox",
+    "varicella",
+    "west nile virus",
+    "yellow fever",
+    "yersiniosis",
+    "zika",
+    "legionares",
+    "listeriosis",
+    "monkeypox",
+    "COVID-19",
+}
 
 
-syndrome_list = [
-{ "name": "Haemorrhagic Fever" },
-{ "name": "Acute Flacid Paralysis" },
-{ "name": "Acute gastroenteritis" },
-{ "name": "Acute respiratory syndrome" },
-{ "name": "Influenza-like illness" },
-{ "name": "Acute fever and rash" },
-{ "name": "Fever of unknown Origin" },
-{ "name": "Encephalitis" },
-{ "name": "Meningitis" },
-]
+syndrome_set = {
+    "Haemorrhagic Fever",
+    "Acute Flacid Paralysis",
+    "Acute gastroenteritis",
+    "Acute respiratory syndrome",
+    "Influenza-like illness",
+    "Acute fever and rash",
+    "Fever of unknown Origin",
+    "Encephalitis",
+    "Meningitis",
+}
 
 
 #IF required we can add the entire body section of the thing into the dictionary but for now it just has those 4 fields
@@ -110,48 +110,42 @@ for pageNum in range(12,13): #change this for the amount of pages to check. if i
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, "html.parser")
 
-    outbreakTitle = soup.find_all("h4", {"class": "sf-list-vertical__title"}) #title and info
-    outbreakLink = soup.find_all("a", {"class": "sf-list-vertical__item"}) #link
+    outbreakTitles = soup.find_all("h4", {"class": "sf-list-vertical__title"}) #title and info
+    outbreakLinks = soup.find_all("a", {"class": "sf-list-vertical__item"}) #link
 
-    for c, i in enumerate(outbreakTitle): #loop between the info
-        splited = re.split('>|<',str(i))
-        dl = re.split('- |– | ｰ',str(splited[4]))
+    for ind, title in enumerate(outbreakTitles): #loop between the info
+        splitTitle = re.split('>|<',str(title))
+        diseaseAndLocation = re.split('-|–|ｰ',str(splitTitle[4]))
 
-            
-        illness = dl[0].strip()
-        date = splited[8][:-3]
+        illness = diseaseAndLocation[0].strip()
+        date = splitTitle[8][:-3]
         date = dateConverter(date)
-        url = str(outbreakLink[c]).split("\"")[3]
+        url = str(outbreakLinks[ind]).split("\"")[3]
         diseases = []
         syndromes = []
         
         currentPage = BeautifulSoup(requests.get(url).content, "html.parser")
         if len(illness) == 4 and illness.isnumeric(): #if the entry is using the old schema, then do this to get the disease
             illness1 = re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"}))))[16]
-            illness2 = re.split('- |– | ｰ|in ',str(illness1))
+            illness2 = re.split('-|–|ｰ|in ',str(illness1))
             illness = illness2[0] 
 
         try:
-            country = dl[1].strip()
+            country = diseaseAndLocation[1].strip()
         except:
             t1 = re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"}))))[16]
-            t2 = re.split('- |– | ｰ|in ',str(t1))
+            t2 = re.split('-|–|ｰ|in',str(t1))
             country = t2[1] 
 
-        #checking is illness is disease or syndrome
-        check = 0
-        for syndrome in syndrome_list:
-            curSyndromeCheck = list(syndrome.values())[0].lower()
+        # Check if illness is a syndrome or a disease
+        isSyndrome = False
+        for syndrome in syndrome_set:
+            curSyndromeCheck = syndrome.lower()
             if curSyndromeCheck in illness.lower() or illness.lower() in curSyndromeCheck:
                 syndromes.append(illness)
-                check = check + 1
-        if check == 0:
-            for disease in disease_list:
-                curDiseaseCheck = list(disease.values())[0].lower()
-                if curDiseaseCheck in illness.lower() or illness.lower() in curDiseaseCheck:
-                    diseases.append(illness)
-                    check = check + 1
-        if check == 0:  #appending any unrecognised illness into the diseases list. Im not ssure if this is to spec. But sometimes there are illnesses not included in the json that they gave us
+                isSyndrome = True
+                
+        if isSyndrome is False: # For now, any unrecognised illness is a disease. This may not be to spec.
             diseases.append(illness)
 
 
@@ -191,7 +185,7 @@ for pageNum in range(12,13): #change this for the amount of pages to check. if i
             break
 
         with open('data.json', 'w') as f:
-            json.dump(lstBasicInfo, f)
+            json.dump(lstBasicInfo, f, indent=2)
 
         print(json.dumps(article, indent=2)) #pretty print json to look at
 
