@@ -108,7 +108,7 @@ def dateConverter(date):
 
 
 lstBasicInfo = []
-for pageNum in range(12,13): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
+for pageNum in range(0,155): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
     counter = 0
     URL = "https://www.who.int/emergencies/disease-outbreak-news/"+str(pageNum) #iterates over the pages
     print(URL)
@@ -202,9 +202,9 @@ for pageNum in range(12,13): #change this for the amount of pages to check. if i
         with open('data.json', 'w') as f:
             json.dump(lstBasicInfo, f, indent=2)
 
-        print(json.dumps(article, indent=2)) #pretty print json to look at
+        #print(json.dumps(article, indent=2)) #pretty print json to look at
 
-        print()
+        #print()
 
 #print(lstBasicInfo) #debug
 
@@ -214,3 +214,5 @@ df = pd.DataFrame(lstBasicInfo)
 
 with open('data.json', 'w') as f:
     json.dump(lstBasicInfo, f)
+
+print("COMPLETE")
