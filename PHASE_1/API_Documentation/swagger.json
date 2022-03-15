@@ -17,12 +17,8 @@
   "basePath": "/v2",
   "tags": [
     {
-      "name": "test tag",
-      "description": "Tag description",
-      "externalDocs": {
-        "description": "External doc link",
-        "url": "http://swagger.io"
-      }
+      "name": "Search",
+      "description": "Search function"
     }
   ],
   "schemes": [
@@ -30,14 +26,188 @@
     "http"
   ],
   "paths": {
-    "/apiTest": {
+    "/search": {
       "post": {
         "tags": [
-          "test tag"
+          "Search"
         ],
-        "summary": "Test the api",
+        "summary": "Search for articles",
+        "description": "This endpoint allows users to search for articles",
+        "operationId": "postSearch",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "JSON data description",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "start_date": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "end_date": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "key_terms": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "location": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "start_date": "2015-10-01T08:45:10",
+                "end_date": "2015-11-01T19:37:12",
+                "key_terms": ["Anthrax", "Zika"],
+                "Location": "Sydney"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": "application/json",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "article": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "date_of_publication": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "headline": {
+                      "type": "string"
+                    },
+                    "main_text": {
+                      "type": "string"
+                    },
+                    "reports": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "diseases": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "syndromes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "event_date": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "location": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "place_id": {
+                                  "type": "integer"
+                                }
+                              }
+                            }
+                          },
+                          "parent_id": {
+                            "type": "string"
+                          },
+                          "report_id": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "log": {
+                  "type": "object",
+                  "properties": {
+                    "Team Name": {
+                      "type": "string"
+                    },
+                    "Access Time": {
+                      "type": "string"
+                    },
+                    "Data Source": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "article": {
+                  "_id": "string",
+                  "url": "string",
+                  "date_of_publication": "datetime",
+                  "headline": "string",
+                  "main_text": "string",
+                  "reports": [
+                    {
+                      "diseases": [],
+                      "syndromes": [],
+                      "event_date": "datetime",
+                      "location": [
+                        {
+                          "places_id": 0
+                        }
+                      ],
+                      "parent_id": "string",
+                      "report_id": "string"
+                    }
+                  ]
+                },
+                "log": {
+                  "Team Name": "SourDough",
+                  "Access Time": "string",
+                  "Data Source": "https://www.who.int/csr/don/en/"
+                }
+              }
+            } 
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": null
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Login"
+        ],
+        "summary": "User login",
         "description": "This tests the API",
-        "operationId": "postApiTest",
+        "operationId": "postLogin",
         "consumes": [
           "application/json",
           "application/xml"
