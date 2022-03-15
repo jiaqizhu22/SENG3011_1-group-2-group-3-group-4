@@ -3,7 +3,7 @@ import json
 # id: serial
 # name: string
 
-class Locations:
+class Syndromes:
     
     def __init__(self,id,name):
         self.id = id # serial
