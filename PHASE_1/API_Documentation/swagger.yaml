@@ -6,13 +6,12 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "http://127.0.0.1:8000"
+host: "127.0.0.1:8000"
 basePath: "/"
 tags:
 - name: "Search"
   description: "Methods for searching the scraped database"
 schemes:
-- "https"
 - "http"
 paths:
   /search:
@@ -54,9 +53,25 @@ paths:
         "200":
           description: "Search result"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/SearchResult"
+            type: "object"
+            properties:
+              results:
+                type: "array"
+                items:
+                  $ref: "#/definitions/SearchResult"
+            example:
+              results:
+              - title: "Article Title"
+                date: "2015-10-01T08:45:10"
+                link: "article.com/article-title"
+              - title: "Second Article"
+                date: "2015-10-01T09:32:11"
+                link: "article.com/article-number-two"
+        default:
+          description: "Error"
+          schema:
+            $ref: "#/definitions/Error"
+                
 definitions:
   SearchResult:
     type: "object"
@@ -69,3 +84,15 @@ definitions:
       link:
         type: "string"
         format: "uri"
+        
+  Error:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+    example:
+      code: 404
+      message: "404 Not Found"
