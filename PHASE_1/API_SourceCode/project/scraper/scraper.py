@@ -84,6 +84,10 @@ syndrome_set = {
 }
 
 
+
+months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+
 #IF required we can add the entire body section of the thing into the dictionary but for now it just has those 4 fields
 import requests
 from bs4 import BeautifulSoup
@@ -93,17 +97,18 @@ import json
 from time import strptime
 import calendar
 
-
 def dateConverter(date):
     date = date.split(" ")
     year = date[2]
     month = str(list(calendar.month_name).index(date[1])).zfill(2)
     day = date[0].zfill(2)
-    return (year+"-"+month+"-"+day) 
+    if(year.isdigit() and month.isdigit() and day.isdigit()):
+        return (year+"-"+month+"-"+day)
+    return False
 
 
 lstBasicInfo = []
-for pageNum in range(12,13): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
+for pageNum in range(0,155): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
     counter = 0
     URL = "https://www.who.int/emergencies/disease-outbreak-news/"+str(pageNum) #iterates over the pages
     print(URL)
@@ -123,6 +128,7 @@ for pageNum in range(12,13): #change this for the amount of pages to check. if i
         url = str(outbreakLinks[ind]).split("\"")[3]
         diseases = []
         syndromes = []
+        eventDate = []
         
         currentPage = BeautifulSoup(requests.get(url).content, "html.parser")
         if len(illness) == 4 and illness.isnumeric(): #if the entry is using the old schema, then do this to get the disease
@@ -135,7 +141,10 @@ for pageNum in range(12,13): #change this for the amount of pages to check. if i
         except:
             t1 = re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"}))))[16]
             t2 = re.split('-|–|ｰ|in',str(t1))
-            country = t2[1] 
+            try:
+                country = t2[1]
+            except:
+                country = ""
 
         # Check if illness is a syndrome or a disease
         isSyndrome = False
@@ -155,7 +164,13 @@ for pageNum in range(12,13): #change this for the amount of pages to check. if i
         for para in currentPage.find_all("p"):
             main_text = main_text + (para.get_text().strip())
 
-
+        indices = [i for i, x in enumerate(main_text.split(" ")) if x in months]
+        for i in indices:
+            if(dateConverter(str(main_text.split(" ")[i-1] + " " + main_text.split(" ")[i]+ " " +main_text.split(" ")[i+1][:-1]))):
+                eventDate = (dateConverter(str(main_text.split(" ")[i-1] + " " + main_text.split(" ")[i]+ " " +main_text.split(" ")[i+1][:-1])))
+                break
+            
+        
         #main_text = currentPage.find_all("article", {"class": "sf-detail-body-wrapper"})
         locs_list = []
         for country in  re.split(', |and ',str(country)):
@@ -168,7 +183,7 @@ for pageNum in range(12,13): #change this for the amount of pages to check. if i
         report = {
             "diseases": diseases,
             "syndromes": syndromes,
-            "event_date":"", #this needs to be sorted out
+            "event_date":eventDate, #this needs to be sorted out. Right now it is just getting the first date that isnt the publishing date and using that as the event date
             "locations":locs_list,  
         }
 
@@ -187,9 +202,8 @@ for pageNum in range(12,13): #change this for the amount of pages to check. if i
         with open('data.json', 'w') as f:
             json.dump(lstBasicInfo, f, indent=2)
 
-        print(json.dumps(article, indent=2)) #pretty print json to look at
+        #print(json.dumps(article, indent=2)) #pretty print json to look at
 
-        
         #print()
 
 #print(lstBasicInfo) #debug
@@ -197,3 +211,8 @@ for pageNum in range(12,13): #change this for the amount of pages to check. if i
 df = pd.DataFrame(lstBasicInfo)
 
 #print(df) #pandas dataframe
+
+with open('data.json', 'w') as f:
+    json.dump(lstBasicInfo, f)
+
+print("COMPLETE")
