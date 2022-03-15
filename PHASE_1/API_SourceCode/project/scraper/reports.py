@@ -4,7 +4,7 @@ import json
 # report_id: string (primary key)
 # event_date: datetime
 
-class Articles:
+class Reports:
     
     def __init__(self,id,url,date_of_publication,headline,main_text):
         self.parent_id = parent_id # string (foreign key reference Article _id)
