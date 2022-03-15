@@ -9,7 +9,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "127.0.0.1:8000",
+  "host": "epidemicscraper-env.eba-t2stx6uv.us-east-1.elasticbeanstalk.com",
   "basePath": "/",
   "tags": [
     {
