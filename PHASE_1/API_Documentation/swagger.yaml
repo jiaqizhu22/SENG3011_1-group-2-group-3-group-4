@@ -3,110 +3,96 @@ info:
   description: "1 Group 2 Group 3 Group 4 - Epidemic Scraper Documentation"
   version: "1.0.0"
   title: "Epidemic Scraper"
-  termsOfService: "http://swagger.io/terms/"
-  contact:
-    email: "apiteam@swagger.io"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "TODO.COM"
-basePath: "/v2"
+host: "epidemicscraper-env.eba-t2stx6uv.us-east-1.elasticbeanstalk.com"
+basePath: "/"
 tags:
-- name: "test tag"
-  description: "Tag description"
-  externalDocs:
-    description: "External doc link"
-    url: "http://swagger.io"
+- name: "Search"
+  description: "Methods for searching the scraped database"
 schemes:
-- "https"
 - "http"
 paths:
-  /apiTest:
-    post:
+  /search:
+    get:
       tags:
-      - "test tag"
+      - "Search"
       summary: "Test the api"
       description: "This tests the API"
-      operationId: "postApiTest"
-      consumes:
-      - "application/json"
-      - "application/xml"
+      operationId: "getSearch"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "JSON/XML data description"
+      - in: "query"
+        name: "start_date"
+        description: "Start date of search range"
         required: true
-        schema:
-          $ref: "#/definitions/TestType"
-      responses:
-        "405":
-          description: "Invalid input"
-      security: 
-        - test_auth: [
-          "write:test",
-          "read:test"
-          ]
-securityDefinitions:
-  test_auth:
-    type: "oauth2"
-    authorizationUrl: "SOMEWHERE.com/oauth/dialog"
-    flow: "implicit"
-    scopes:
-      write:test: "modify something in your account"
-      read:test: "read something"
-definitions:
-  Category:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      name:
         type: "string"
-    xml:
-      name: "Category"
-  Tag:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      name:
+        format: "date-time"
+      - in: "query"
+        name: "end_date"
+        description: "End date of search range"
+        required: true
         type: "string"
-    xml:
-      name: "Tag"
-  TestType:
-    type: "object"
-    required:
-    - "name"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      category:
-        $ref: "#/definitions/Category"
-      name:
+        format: "date-time"
+      - in: "query"
+        name: "location"
+        description: "Location of diseases searched"
+        required: true
         type: "string"
-        example: "funnyString"
-      tags:
+      - in: "query"
+        name: "key_terms"
+        description: "Key terms to search for: Searches for entries with ALL of these terms"
+        required: true
         type: "array"
-        xml:
-          name: "tag"
-          wrapped: true
         items:
-          $ref: "#/definitions/Tag"
-      status:
+          type: "string"
+        collectionFormat: "csv"
+      responses:
+        "200":
+          description: "Search result"
+          schema:
+            type: "object"
+            properties:
+              results:
+                type: "array"
+                items:
+                  $ref: "#/definitions/SearchResult"
+            example:
+              results:
+              - title: "Article Title"
+                date: "2015-10-01T08:45:10"
+                link: "article.com/article-title"
+              - title: "Second Article"
+                date: "2015-10-01T09:32:11"
+                link: "article.com/article-number-two"
+        default:
+          description: "Error"
+          schema:
+            $ref: "#/definitions/Error"
+                
+definitions:
+  SearchResult:
+    type: "object"
+    properties:
+      title:
         type: "string"
-        description: "enum status"
-        enum:
-        - "available"
-        - "pending"
-        - "sold"
-    xml:
-      name: "TestType"
-externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
+      date:
+        type: "string"
+        format: "date-time"
+      link:
+        type: "string"
+        format: "uri"
+        
+  Error:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+    example:
+      code: 404
+      message: "404 Not Found"

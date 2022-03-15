@@ -9,18 +9,31 @@
 
 
 ## Package Management: Poetry 
-How to Install: 
-`pip install poetry` 
+How to Install poetry locally: 
+`pip install poetry`
+How to use poetry to install packages:
 `poetry install` 
-
-To add a package, run: 
-`poetry add <package_name>` 
+To add a package into poetry, run: 
+`poetry add <package_name>`
 
 
 ## React Frontend
 Run frontend: 
-`cd frontend` 
+`cd PHASE_2/frontend/` 
 `npm start` 
+
+
+## Starting Swagger API: index.html page
+- Locating to folder:
+`cd PHASE_1/API_SourceCode/`
+- Run poetry virtual environment:
+`poetry shell`
+- Update all packages:
+`poetry update`
+- Running server:
+`python manage.py runserver`
+- Or alternatively run server without a virtual environment:
+`poetry run python manage.py runserver`
 
 
 ## Version Control: Git 
@@ -38,16 +51,6 @@ Run frontend:
 `git pull upstream main` 
 - Update local feature branch: 
 `git rebase main` 
-
-## Starting Swagger API: index.html page
-- Locating to folder:
-`cd PHASE_1/API_SourceCode/`
-- Run poetry virtual environment:
-`poetry shell`
-- Update all packages:
-`poetry update`
-- Running server
-`python manage.py runserver`
 
 
 
