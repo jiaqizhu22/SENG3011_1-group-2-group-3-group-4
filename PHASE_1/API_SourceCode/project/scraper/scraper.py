@@ -108,7 +108,7 @@ def dateConverter(date):
 
 
 lstBasicInfo = []
-for pageNum in range(0,155): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
+for pageNum in range(0,140): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
     counter = 0
     URL = "https://www.who.int/emergencies/disease-outbreak-news/"+str(pageNum) #iterates over the pages
     print(URL)
@@ -132,9 +132,14 @@ for pageNum in range(0,155): #change this for the amount of pages to check. if i
         
         currentPage = BeautifulSoup(requests.get(url).content, "html.parser")
         if len(illness) == 4 and illness.isnumeric(): #if the entry is using the old schema, then do this to get the disease
+            #print(re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"})))))
             illness1 = re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"}))))[16]
             illness2 = re.split('-|–|ｰ|in ',str(illness1))
-            illness = illness2[0] 
+            illness = illness2[0]
+            if illness[-1] == ' ':
+                illness = illness[:-1]
+            if len(illness) == 4 and illness.isnumeric():
+               illness = illness2[1] 
 
         try:
             country = diseaseAndLocation[1].strip()
@@ -151,11 +156,11 @@ for pageNum in range(0,155): #change this for the amount of pages to check. if i
         for syndrome in syndrome_set:
             curSyndromeCheck = syndrome.lower()
             if curSyndromeCheck in illness.lower() or illness.lower() in curSyndromeCheck:
-                syndromes.append(illness)
+                syndromes.append(illness.strip())
                 isSyndrome = True
                 
         if isSyndrome is False: # For now, any unrecognised illness is a disease. This may not be to spec.
-            diseases.append(illness)
+            diseases.append(illness.strip())
 
 
 
@@ -166,8 +171,11 @@ for pageNum in range(0,155): #change this for the amount of pages to check. if i
 
         indices = [i for i, x in enumerate(main_text.split(" ")) if x in months]
         for i in indices:
-            if(dateConverter(str(main_text.split(" ")[i-1] + " " + main_text.split(" ")[i]+ " " +main_text.split(" ")[i+1][:-1]))):
-                eventDate = (dateConverter(str(main_text.split(" ")[i-1] + " " + main_text.split(" ")[i]+ " " +main_text.split(" ")[i+1][:-1])))
+            theYear = main_text.split(" ")[i+1]
+            if theYear[:-1] == ' ':
+                theYear = theYear[:-1]
+            if(dateConverter(str(main_text.split(" ")[i-1] + " " + main_text.split(" ")[i]+ " " +theYear))):
+                eventDate = (dateConverter(str(main_text.split(" ")[i-1] + " " + main_text.split(" ")[i]+ " " +theYear)))
                 break
             
         
@@ -202,9 +210,9 @@ for pageNum in range(0,155): #change this for the amount of pages to check. if i
         with open('data.json', 'w') as f:
             json.dump(lstBasicInfo, f, indent=2)
 
-        #print(json.dumps(article, indent=2)) #pretty print json to look at
+       # print(json.dumps(article, indent=2)) #pretty print json to look at
 
-        #print()
+       # print()
 
 #print(lstBasicInfo) #debug
 
