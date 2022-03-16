@@ -5,7 +5,7 @@ import json
 
 class Report_diseases:
     
-    def __init__(self,id,name):
+    def __init__(self,disease_id,report_id):
         self.disease_id = disease_id # int (foreign key reference diseases disease_id)
         self.report_id = report_id # string (foreign key reference reports report_id)
 

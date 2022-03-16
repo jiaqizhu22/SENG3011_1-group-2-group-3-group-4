@@ -6,14 +6,14 @@ import json
 
 class Reports:
     
-    def __init__(self,id,url,date_of_publication,headline,main_text):
+    def __init__(self,parent_id,report_id,event_date):
         self.parent_id = parent_id # string (foreign key reference Article _id)
         self.report_id = report_id # string (primary key)
         self.event_date = event_date #datetime
 
     # If we want to save our api class to a JSON file for other teams to use
     def save_to_json(self,filename):
-        api_dict = {'parent_id':self.parent_id, 'report_id':self.report_id, 'event_date':event_date}
+        api_dict = {'parent_id':self.parent_id, 'report_id':self.report_id, 'event_date':self.event_date}
         with open(filename, 'w') as f:
             f.write(json.dumps(api_dict, indent=4))
 

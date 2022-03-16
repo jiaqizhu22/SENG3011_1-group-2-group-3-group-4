@@ -5,7 +5,7 @@ import json
 
 class Locations:
     
-    def __init__(self,id,name):
+    def __init__(self,report_id,place_id):
         self.report_id = report_id # report_id: string (foreign key reference reports report_id)
         self.place_id = place_id # place_id: int (foreign key reference places place_id)
 
