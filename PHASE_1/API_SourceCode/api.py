@@ -10,7 +10,7 @@ from scraper.models import Articles, Locations, Reports
 from django.utils.dateparse import parse_datetime
 from django.conf import settings
 from django.utils.timezone import make_aware
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 
 if __name__ == '__main__': 
@@ -31,17 +31,15 @@ if __name__ == '__main__':
             report_list = article['reports']
             #print(report_list)
             # for report in report_list:
-            disease = None
+            disease = ''
             if report_list['diseases'] != []:
                 disease = report_list['diseases'][0]
-            syndrome = None
+            syndrome = ''
             if report_list['syndromes'] != []:
                 syndrome = report_list['syndromes'][0]
-            
-            if report_list['event_date'] != []:
-                date = make_aware(parse_datetime(report_list['event_date']))
-            else:
-                date = None
+            date = None
+            if report_list['event_date'] != [] == report_list['event_date'] != '':
+                date = make_aware(parse_datetime(report_list['event_date']))                
             
             new_report = Reports.objects.create(
                 parent_id=new_article_obj,
@@ -52,15 +50,19 @@ if __name__ == '__main__':
             
             if report_list['locations'] != []:
                 try:
-                    location = Locations.objects.get(country=report_list['locations'][0]['country'], location=report_list['locations'][0]['location'])
+                    locations = Locations.objects.get(country=report_list['locations'][0]['country'], location=report_list['locations'][0]['location'])
+                    print(locations)
+              
+                    new_report.locations.add(locations)
                     
-                    new_report.locations.add(location)
                 except ObjectDoesNotExist:
                     location = Locations.objects.create(
                         country=report_list['locations'][0]['country'],
                         location=report_list['locations'][0]['location']
                     )
                     new_report.locations.add(location)
+                #except MultipleObjectsReturned:
+                    
                 
         
     print('COMPLETE LOADING DATA')
