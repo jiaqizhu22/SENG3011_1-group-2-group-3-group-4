@@ -1,5 +1,5 @@
-from tkinter import CASCADE
 from django.db import models
+from datetime import datetime
 
 # Create your models here.
 class Articles(models.Model):
@@ -12,7 +12,7 @@ class Articles(models.Model):
     def __str__(self):
         return {
             'url': self.url,
-            'date_of_publication': self.date_of_publication,
+            'date_of_publication': self.date_of_publication.strftime("%Y-%m-%dT%H-%M-%S"),
             'headline': self.headline,
             'main_text': self.main_text,
         }

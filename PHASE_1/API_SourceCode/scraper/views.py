@@ -5,6 +5,7 @@ from django.utils.dateparse import parse_datetime
 from .scraper import web_scraper
 from .models import Articles, Reports, Locations
 from django.utils.timezone import make_aware
+from datetime import datetime
 
 # Create your views here.
 
@@ -49,15 +50,15 @@ def search(request: HttpRequest):
     key_terms = request.GET.get("key_terms")
     if key_terms != None:
         key_terms = key_terms.split(',')
+        key_terms = map(lambda x : x.lower(), key_terms)
+    else:
+        key_terms = []
     
     # Load scraper to get data - list of dicts
     # data = web_scraper()
     
     # Search results - articles matching parameters
     results = []
-
-    #title_str = "Outbreak in " + str(location)
-    #link = "fake-article.com/" + title_str.lower().replace(' ', '-') + '-' + '-'.join(key_terms).replace(' ', '-')
 
     articles = Articles.objects.filter(date_of_publication__range=(start_date, end_date))
     for article in articles:
@@ -72,45 +73,66 @@ def search(request: HttpRequest):
         '''
         report_list = []
         reports = Reports.objects.filter(parent_id=article)
-        '''
-        for report in reports:
-            if report.diseases in key_terms:
-                results.append(article)
-            elif report.syndromes in key_terms:
-                results.append(article)
-            else:
-                results.append(article)
-        '''
         for report in reports:
             report_string = report.__str__()
-            # Find location
-            location_id = int(report_string['locations'])
-            location = Locations.objects.get(id=location_id)
-            print(location_id)
-            print(location)
-            location_string = location.__str__()
-            report_info = {
-                'diseases': [report_string['diseases']],
-                'syndromes': [report_string['syndromes']],
-                'event_date': report_string['event_date'],
-                'locations': [location_string]
+            '''
+            {
+                'diseases': self.diseases,
+                'syndromes': self.syndromes,
+                'event_date': self.event_date,
+                'locations': self.locations,
+                'report_id': self.id,
+                'parent_id': self.parent_id
             }
-            report_list.append(report_info)
-        '''
-        {
-            'diseases': self.diseases,
-            'syndromes': self.syndromes,
-            'event_date': self.event_date,
-            'locations': self.locations,
-            'report_id': self.id,
-            'parent_id': self.parent_id
-        }
-        '''
+            '''
+            
+            match_location = False
+            # Find location
+            location_id = report_string['locations']
+            # Error: location shouldn't all be None
+            print(location_id)
+            location_string = {
+                'country': '',
+                'location': ''
+            }
+            if location_id != None:
+                stored_location = Locations.objects.get(id=location_id)
+                location_string = stored_location.__str__()
+                print(location_string)
+            # Check if location matches 
+            if location == None or location.lower() == location_string['country'].lower() or location.lower() == location_string['location'].lower():
+                match_location = True
+                
+            match_key_terms = False       
+            if key_terms == [] or report_string['diseases'].lower() in key_terms or report_string['syndromes'].lower() in key_terms:
+                match_key_terms = True
+
+            if match_location is True or match_key_terms is True:
+                report_info = {
+                    'diseases': [],
+                    'syndromes': [],
+                    'event_date': '',
+                    'locations': []
+                }
+                if report_string['diseases'] != None:
+                    report_info['diseases'].append(report_string['diseases'])
+                if report_string['syndromes'] != None:
+                    report_info['syndromes'].append(report_string['syndromes'])
+                # Format event_date
+                if report_string['event_date'] != None:
+                    report_info['event_date'] = report_string['event_date'].strftime("%Y-%m-%dT%H-%M-%S")
+                if location_string != {'country': '','location': ''}:
+                    report_info['locations'].append(location_string)
+                    
+                report_list.append(report_info)
+            else:
+                continue
+
         article_string['reports'] = report_list
         results.append(article_string)
         
     
     return JsonResponse({
-        "articles": [results]
+        "articles": results
     })
 
