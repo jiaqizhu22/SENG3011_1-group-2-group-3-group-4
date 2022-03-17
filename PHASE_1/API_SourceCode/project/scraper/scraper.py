@@ -128,7 +128,7 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
         url = str(outbreakLinks[ind]).split("\"")[3]
         diseases = []
         syndromes = []
-        eventDate = []
+        eventDate = date
         
         currentPage = BeautifulSoup(requests.get(url).content, "html.parser")
         if len(illness) == 4 and illness.isnumeric(): #if the entry is using the old schema, then do this to get the disease
