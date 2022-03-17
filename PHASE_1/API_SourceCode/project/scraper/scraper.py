@@ -108,7 +108,7 @@ def dateConverter(date):
 
 
 lstBasicInfo = []
-for pageNum in range(0,140): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
+for pageNum in range(0,150): #change this for the amount of pages to check. if its over the number of pages itll end auto. If you wanna check for example, page 7, do range(7,8)
     counter = 0
     URL = "https://www.who.int/emergencies/disease-outbreak-news/"+str(pageNum) #iterates over the pages
     print(URL)
@@ -201,7 +201,7 @@ for pageNum in range(0,140): #change this for the amount of pages to check. if i
             "date_of_publication": date,
             "headline": headline,
             "main_text":main_text,
-            "reports":report,
+            "reports":[report],
         }
         lstBasicInfo.append(article) #appending the dicts into the list
         if len(article) == 0: #stops the loop when it reaches the end
