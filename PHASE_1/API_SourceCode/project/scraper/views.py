@@ -44,6 +44,8 @@ def search(request: HttpRequest):
     location = request.GET.get("location")
     key_terms = request.GET.get("key_terms").split(',')
     
+    
+
     title_str = "Outbreak in " + str(location)
     link = "fake-article.com/" + title_str.lower().replace(' ', '-') + '-' + '-'.join(key_terms).replace(' ', '-')
     

@@ -6,10 +6,13 @@ import json
 
 class Reports:
     
-    def __init__(self,parent_id,report_id,event_date):
-        self.parent_id = parent_id # string (foreign key reference Article _id)
-        self.report_id = report_id # string (primary key)
-        self.event_date = event_date #datetime
+    def __init__(self,parent_id,report_id,event_date,diseases,syndromes,locations):
+        self.parent_id = parent_id # int (foreign key reference Article _id)
+        self.report_id = report_id # int (primary key)
+        self.event_date = event_date # datetime
+        self.diseases = diseases # string
+        self.syndromes = syndromes # string
+        self.locations = locations # int (foreign key reference Locations id)
 
     # If we want to save our api class to a JSON file for other teams to use
     def save_to_json(self,filename):

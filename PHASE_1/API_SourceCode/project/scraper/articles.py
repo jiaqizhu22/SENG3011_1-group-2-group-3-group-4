@@ -1,6 +1,6 @@
 import json
 
-# _id: string (primary key)
+# _id: integer (primary key)
 # url: string
 # date_of_publication: datetime
 # headline: string
@@ -9,7 +9,7 @@ import json
 class Articles:
     
     def __init__(self,_id,url,date_of_publication,headline,main_text):
-        self._id = _id # string (primary key)
+        self._id = _id # integer (primary key)
         self.url = url # string
         self.date_of_publication = date_of_publication #datetime
         self.headline = headline # string
