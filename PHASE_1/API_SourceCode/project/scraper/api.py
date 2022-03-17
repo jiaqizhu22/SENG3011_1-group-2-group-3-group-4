@@ -1,50 +1,79 @@
-from datetime import date
 import json
-import re
-from articles import Articles
-from diseases import Diseases
-from locations import Locations
-from places import Places
-from reports import Reports
-from syndromes import Syndromes
-from report_diseases import Report_diseases
-from report_syndromes import Report_syndromes
 
-articles_list = []
-article_id = 0
+class Api:
+    
+    def __init__(self,article,report,log):
+        self.article = {
+            "url":url,
+            "date_of_publication": date,
+            "headline": headline,
+            "main_text":main_text,
+            "reports":reports,
+        }
+        self.report = {
+            "diseases": diseases,
+            "syndromes": syndromes,
+            "event_date":"", #this needs to be sorted out
+            "locations":locs_list,
+        }
+        self.log = {
+            "Team Name": team,
+            "Access Time": datetime,
+            "Data Source": source_url
+        }
 
-reports_list = []
-report_id = 0
+    # If we want to save our api class to a JSON file for other teams to use
+    def save_to_json(self,filename):
+        api_dict = {'article': self.article, 'report': self.report, 'log': self.log}
+        with open(filename, 'w') as f:
+            f.write(json.dumps(api_dict, indent=4))
 
-# diseases_list = []
-# syndrome_id = 0
-# locations_list = []
-# location_id = 0
-# places_list = []
+    # Loading our api class from a json file
+    def load_from_json(self, filename):
+        with open(filename, 'r') as f:
+            data = json.loads(f.read())
+        #Assigning components
+        self.article = data['article']
+        self.report = data['report']
+        self.log = data['log']
 
-# syndromes_list = []
-# report_diseases_list = []
-# report_syndromes_list = []
-i = 0
-with open('data.json', 'r') as json_file:
-    # Store the json data as a list
-    data = json.load(json_file)
-    for article in data:
-        article_id += 1
+# article_list = []
+# with open('PHASE_1/API_SourceCode/project/scraper/data.json', 'r') as json_file:
+#     # Store the json data as a list
+#     data = json.load(json_file)
+
+#     for item in data:
+#         url = item['url']
+#         pub_date = item['date_of_publication']
+#         headline = item['headline']
+#         content = item['main_text']
+#         reports_list = []
+#         reports = item['reports']
+#         print(reports)
+#         for r in reports.split(''):
+#             print(r)
+#             diseases = r[0]
+#             syndromes = r[1]
+#             event_date = r[2]
+#             locs_list = r[3]
+#             report = {
+#                 "diseases": diseases,
+#                 "syndromes": syndromes,
+#                 "event_date":"", #this needs to be sorted out
+#                 "locations":locs_list,  
+#             }
+#             reports.append(report)
         
-        url = article['url']
-        date_of_publication = article['date_of_publication']
-        headline = article['headline']
-        main_text = article['main_text']
-        report = article['reports']
-        for items in report:
-            report_id += 1
-            diseases = report['diseases']
-            event_date = report['event_date']
-        Report = Reports(article_id, report_id, event_date)
-        reports_list.append(Report)
-        Article = Articles(article_id,url,date_of_publication,headline,main_text)
-        articles_list.append(Article)
+#         article = { #making dict of the info.
+#             "url":url,
+#             "date_of_publication": date,
+#             "headline": headline,
+#             "main_text":main_text,
+#             "reports":reports,
+#         }
+#         article_list.append(article)
 
-for article in articles_list:
-    print(article.headline)
+#     # --- Handling different requests ---
+#     # Request all reports in a country
+
+# print(article_list)

@@ -5,10 +5,9 @@ import json
 
 class Locations:
     
-    def __init__(self,id,country,location):
-        self.id = id # id: int (primary key)
-        self.country = country # string
-        self.location = location # string
+    def __init__(self,report_id,place_id):
+        self.report_id = report_id # report_id: string (foreign key reference reports report_id)
+        self.place_id = place_id # place_id: int (foreign key reference places place_id)
 
     # If we want to save our api class to a JSON file for other teams to use
     def save_to_json(self,filename):
