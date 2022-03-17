@@ -9,7 +9,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "epidemicscraper-env.eba-t2stx6uv.us-east-1.elasticbeanstalk.com",
+  "host": "127.0.0.1:8000",
   "basePath": "/",
   "tags": [
     {
@@ -37,7 +37,7 @@
             "in": "query",
             "name": "start_date",
             "description": "Start date of search range",
-            "required": true,
+            "required": false,
             "type": "string",
             "format": "date-time"
           },
@@ -45,7 +45,7 @@
             "in": "query",
             "name": "end_date",
             "description": "End date of search range",
-            "required": true,
+            "required": false,
             "type": "string",
             "format": "date-time"
           },
@@ -53,14 +53,14 @@
             "in": "query",
             "name": "location",
             "description": "Location of diseases searched",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "in": "query",
             "name": "key_terms",
             "description": "Key terms to search for: Searches for entries with ALL of these terms",
-            "required": true,
+            "required": false,
             "type": "array",
             "items": {
               "type": "string"

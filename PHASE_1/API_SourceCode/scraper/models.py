@@ -37,7 +37,7 @@ class Reports(models.Model):
     event_date = models.DateTimeField(db_column='event_date', blank=True, null=True)
     diseases = models.CharField(db_column='diseases', max_length=50, blank=True)
     syndromes = models.CharField(db_column='syndromes', max_length=50, blank=True)
-    locations = models.ManyToManyField(Locations, blank=True)
+    locations = models.ForeignKey(Locations, null=True, on_delete=models.CASCADE)
     
     
     def __str__(self):

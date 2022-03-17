@@ -4,6 +4,7 @@ from django.utils.dateparse import parse_datetime
 
 from .scraper import web_scraper
 from .models import Articles, Reports, Locations
+from django.utils.timezone import make_aware
 
 # Create your views here.
 
@@ -38,14 +39,16 @@ def search(request: HttpRequest):
     if request.method != "GET":
         return HttpResponseNotAllowed(request.method + " requests not allowed")
     
-    start_date = parse_datetime(request.GET.get("start_date"))
-    end_date = parse_datetime(request.GET.get("end_date"))
+    start_date = make_aware(parse_datetime(request.GET.get("start_date")))
+    end_date = make_aware(parse_datetime(request.GET.get("end_date")))
     
     #mid_date = start_date + (end_date - start_date) / 2
     #date_str = mid_date.strftime("%Y-%m-%dT%H:%M:%S")
     
     location = request.GET.get("location")
-    key_terms = request.GET.get("key_terms").split(',')
+    key_terms = request.GET.get("key_terms")
+    if key_terms != None:
+        key_terms = key_terms.split(',')
     
     # Load scraper to get data - list of dicts
     # data = web_scraper()
@@ -56,7 +59,7 @@ def search(request: HttpRequest):
     #title_str = "Outbreak in " + str(location)
     #link = "fake-article.com/" + title_str.lower().replace(' ', '-') + '-' + '-'.join(key_terms).replace(' ', '-')
 
-    articles = Articles.objects.filter(data_of_publication__range=(start_date, end_date))
+    articles = Articles.objects.filter(date_of_publication__range=(start_date, end_date))
     for article in articles:
         article_string = article.__str__()
         '''
@@ -81,8 +84,10 @@ def search(request: HttpRequest):
         for report in reports:
             report_string = report.__str__()
             # Find location
-            location_id = report_string['locations']
+            location_id = int(report_string['locations'])
             location = Locations.objects.get(id=location_id)
+            print(location_id)
+            print(location)
             location_string = location.__str__()
             report_info = {
                 'diseases': [report_string['diseases']],
