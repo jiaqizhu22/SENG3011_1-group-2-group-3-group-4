@@ -58,7 +58,18 @@ def search(request: HttpRequest):
 
     articles = Articles.objects.filter(data_of_publication__range=(start_date, end_date))
     for article in articles:
+        article_string = article.__str__()
+        '''
+        {
+            'url': self.url,
+            'date_of_publication': self.date_of_publication,
+            'headline': self.headline,
+            'main_text': self.main_text,
+        }
+        '''
+        report_list = []
         reports = Reports.objects.filter(parent_id=article)
+        '''
         for report in reports:
             if report.diseases in key_terms:
                 results.append(article)
@@ -66,9 +77,29 @@ def search(request: HttpRequest):
                 results.append(article)
             else:
                 results.append(article)
-    
-    
-    
+        '''
+        for report in reports:
+            report_string = report.__str__()
+            # Find location
+            location_id = report_string['locations']
+            location = Locations.objects.get(id=location_id)
+            location_string = location.__str__()
+            report_info = {
+                
+            }
+        '''
+        {
+            'diseases': self.diseases,
+            'syndromes': self.syndromes,
+            'event_date': self.event_date,
+            'locations': self.locations,
+            'report_id': self.id,
+            'parent_id': self.parent_id
+        }
+        '''
+        
+            
+            
     
     return JsonResponse({
         "articles": [results]
