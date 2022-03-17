@@ -2,6 +2,8 @@ from django.http import HttpRequest, JsonResponse, HttpResponseNotAllowed
 from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
 
+from scraper import web_scraper
+
 # Create your views here.
 
 #from .models import Book, Author, BookInstance, Genre
@@ -44,14 +46,18 @@ def search(request: HttpRequest):
     location = request.GET.get("location")
     key_terms = request.GET.get("key_terms").split(',')
     
+    # Load scraper to get data - list of dicts
+    data = web_scraper()
     
+    # Search results - articles matching parameters
+    results = []
 
-    title_str = "Outbreak in " + str(location)
-    link = "fake-article.com/" + title_str.lower().replace(' ', '-') + '-' + '-'.join(key_terms).replace(' ', '-')
-    
+    #title_str = "Outbreak in " + str(location)
+    #link = "fake-article.com/" + title_str.lower().replace(' ', '-') + '-' + '-'.join(key_terms).replace(' ', '-')
+
     
     return JsonResponse({
-        "results": [
+        "articles": [
             {"title": title_str,
              "date": date_str,
              "link": link}],

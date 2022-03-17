@@ -215,6 +215,7 @@ def web_scraper():
     # print(df) #pandas dataframe
     return lstBasicInfo
 
+
 if __name__ == "__main__":
     lstBasicInfo = web_scraper()
     '''
