@@ -85,8 +85,12 @@ def search(request: HttpRequest):
             location = Locations.objects.get(id=location_id)
             location_string = location.__str__()
             report_info = {
-                
+                'diseases': [report_string['diseases']],
+                'syndromes': [report_string['syndromes']],
+                'event_date': report_string['event_date'],
+                'locations': [location_string]
             }
+            report_list.append(report_info)
         '''
         {
             'diseases': self.diseases,
@@ -97,9 +101,9 @@ def search(request: HttpRequest):
             'parent_id': self.parent_id
         }
         '''
+        article_string['reports'] = report_list
+        results.append(article_string)
         
-            
-            
     
     return JsonResponse({
         "articles": [results]
