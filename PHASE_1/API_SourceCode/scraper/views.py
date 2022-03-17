@@ -2,7 +2,8 @@ from django.http import HttpRequest, JsonResponse, HttpResponseNotAllowed
 from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
 
-from scraper import web_scraper
+from .scraper import web_scraper
+from .models import Articles, Reports, Locations
 
 # Create your views here.
 
@@ -47,7 +48,7 @@ def search(request: HttpRequest):
     key_terms = request.GET.get("key_terms").split(',')
     
     # Load scraper to get data - list of dicts
-    data = web_scraper()
+    # data = web_scraper()
     
     # Search results - articles matching parameters
     results = []
@@ -55,11 +56,21 @@ def search(request: HttpRequest):
     #title_str = "Outbreak in " + str(location)
     #link = "fake-article.com/" + title_str.lower().replace(' ', '-') + '-' + '-'.join(key_terms).replace(' ', '-')
 
+    articles = Articles.objects.filter(data_of_publication__range=(start_date, end_date))
+    for article in articles:
+        reports = Reports.objects.filter(parent_id=article)
+        for report in reports:
+            if report.diseases in key_terms:
+                results.append(article)
+            elif report.syndromes in key_terms:
+                results.append(article)
+            else:
+                results.append(article)
+    
+    
+    
     
     return JsonResponse({
-        "articles": [
-            {"title": title_str,
-             "date": date_str,
-             "link": link}],
+        "articles": [results]
     })
 
