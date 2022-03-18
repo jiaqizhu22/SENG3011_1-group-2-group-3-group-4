@@ -10,6 +10,7 @@ class Articles(models.Model):
     main_text = models.TextField(db_column='main_text')
     
     # Stringfy article info
+    '''
     def __str__(self):
         return {
             'url': self.url,
@@ -17,6 +18,7 @@ class Articles(models.Model):
             'headline': self.headline,
             'main_text': self.main_text,
         }
+    ''' 
     
     
 class Locations(models.Model):
