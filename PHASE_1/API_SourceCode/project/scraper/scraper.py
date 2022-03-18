@@ -102,7 +102,7 @@ def dateConverter(date):
     year = date[2]
     month = str(list(calendar.month_name).index(date[1])).zfill(2)
     day = date[0].zfill(2)
-    if(year.isdigit() and month.isdigit() and day.isdigit()):
+    if(year.isdigit() and month.isdigit() and day.isdigit() and len(year) == 4 and len(day) <=  2):
         return (year+"-"+month+"-"+day)
     return False
 
@@ -169,13 +169,15 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
         for para in currentPage.find_all("p"):
             main_text = main_text + (para.get_text().strip())
 
-        indices = [i for i, x in enumerate(main_text.split(" ")) if x in months]
+        indices = [i for i, x in enumerate(re.split(' |,',str(main_text))) if x in months]
+        #here we will need to collect all valid datess and make a date range out of them for the event date. For now it
+        #is sonly doing one date 
         for i in indices:
-            theYear = main_text.split(" ")[i+1]
-            if theYear[:-1] == ' ':
-                theYear = theYear[:-1]
-            if(dateConverter(str(main_text.split(" ")[i-1] + " " + main_text.split(" ")[i]+ " " +theYear))):
-                eventDate = (dateConverter(str(main_text.split(" ")[i-1] + " " + main_text.split(" ")[i]+ " " +theYear)))
+            textList = re.split(' |,',str(main_text))
+           # print(textList[i-1] + " " + textList[i]+ " " +textList[i+1].replace(".",""))
+            if(dateConverter(textList[i-1] + " " + textList[i]+ " " +textList[i+1].replace(".",""))):
+                eventDate = dateConverter(textList[i-1] + " " + textList[i]+ " " +textList[i+1].replace(".",""))
+                #print(eventDate)
                 break
             
         
@@ -210,7 +212,7 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
         with open('data.json', 'w') as f:
             json.dump(lstBasicInfo, f, indent=2)
 
-       # print(json.dumps(article, indent=2)) #pretty print json to look at
+        #print(json.dumps(article, indent=2)) #pretty print json to look at
 
        # print()
 
