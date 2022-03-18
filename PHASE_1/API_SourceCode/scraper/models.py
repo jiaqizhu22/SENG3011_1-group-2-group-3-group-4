@@ -1,7 +1,7 @@
 from django.db import models
 from datetime import datetime
 
-# Create your models here.
+
 class Articles(models.Model):
     _id = models.AutoField(db_column='_id', primary_key=True)
     url = models.URLField(db_column='url')
@@ -9,6 +9,7 @@ class Articles(models.Model):
     headline = models.CharField(db_column='headline', max_length=100)
     main_text = models.TextField(db_column='main_text')
     
+    # Stringfy article info
     def __str__(self):
         return {
             'url': self.url,
@@ -23,7 +24,7 @@ class Locations(models.Model):
     country = models.CharField(db_column='country', max_length=50, blank=True)
     location = models.CharField(db_column='location', max_length=50, blank=True)
     
-    
+    # Stringfy location
     def __str__(self):
         return {
             'country': self.country,
@@ -35,11 +36,11 @@ class Reports(models.Model):
     id = models.AutoField(db_column='id', primary_key=True)
     parent_id = models.ForeignKey(Articles, on_delete=models.CASCADE)
     event_date = models.DateTimeField(db_column='event_date', blank=True, null=True)
-    diseases = models.CharField(db_column='diseases', max_length=50, blank=True)
-    syndromes = models.CharField(db_column='syndromes', max_length=50, blank=True)
+    diseases = models.CharField(db_column='diseases', max_length=50, blank=True, null=True)
+    syndromes = models.CharField(db_column='syndromes', max_length=50, blank=True, null=True)
     locations = models.ForeignKey(Locations, null=True, on_delete=models.CASCADE)
     
-    
+    # Stringfy report
     def __str__(self):
         return {
             'diseases': self.diseases,
