@@ -151,34 +151,37 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
             except:
                 country = ""
 
+        main_text = ""
+        for para in currentPage.find_all("p"):
+            main_text = main_text + (para.get_text().strip())
+
+
         # Check if illness is a syndrome or a disease
         isSyndrome = False
         isDisease = False
         for syndrome in syndrome_set:
             curSyndromeCheck = syndrome.lower()
-            if curSyndromeCheck in illness.lower() or illness.lower() in curSyndromeCheck:
+            if curSyndromeCheck in illness.lower() or illness.lower() in curSyndromeCheck or curSyndromeCheck in main_text:
                 #syndromes.append(illness.strip())
                 syndromes.append(syndrome)
                 isSyndrome = True
-                break
+                
                 
         for disease in disease_set:
             curDiseaseCheck = disease.lower()
-            if curDiseaseCheck in illness.lower() or illness.lower() in curDiseaseCheck:
+            if curDiseaseCheck in illness.lower() or illness.lower() in curDiseaseCheck or curDiseaseCheck in main_text:
                 #syndromes.append(illness.strip())
                 diseases.append(disease)
                 isDisease = True
-                break
                 
-        if isSyndrome is False and isDisease is False: # For now, any unrecognised illness is a disease. This may not be to spec.
+                
+        if isSyndrome is False and isDisease is False and "update" not in illness.lower(): # For now, any unrecognised illness is a disease. This may not be to spec.
             diseases.append(illness.strip())
 
 
 
         headline = currentPage.find("h1").get_text().strip()
-        main_text = ""
-        for para in currentPage.find_all("p"):
-            main_text = main_text + (para.get_text().strip())
+
 
         indices = [i for i, x in enumerate(re.split(' |,',str(main_text))) if x in months]
         #here we will need to collect all valid datess and make a date range out of them for the event date. For now it
