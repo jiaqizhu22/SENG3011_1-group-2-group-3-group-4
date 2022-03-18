@@ -9,7 +9,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "127.0.0.1:8000",
+  "host": "epidemicscraper-env.eba-t2stx6uv.us-east-1.elasticbeanstalk.com",
   "basePath": "/",
   "tags": [
     {
@@ -37,7 +37,7 @@
             "in": "query",
             "name": "start_date",
             "description": "Start date of search range",
-            "required": false,
+            "required": true,
             "type": "string",
             "format": "date-time"
           },
@@ -45,7 +45,7 @@
             "in": "query",
             "name": "end_date",
             "description": "End date of search range",
-            "required": false,
+            "required": true,
             "type": "string",
             "format": "date-time"
           },
@@ -53,14 +53,14 @@
             "in": "query",
             "name": "location",
             "description": "Location of diseases searched",
-            "required": false,
+            "required": true,
             "type": "string"
           },
           {
             "in": "query",
             "name": "key_terms",
             "description": "Key terms to search for: Searches for entries with ALL of these terms",
-            "required": false,
+            "required": true,
             "type": "array",
             "items": {
               "type": "string"
@@ -74,7 +74,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "articles": {
+                "results": {
                   "type": "array",
                   "items": {
                     "$ref": "#/definitions/SearchResult"
@@ -82,7 +82,20 @@
                   "uniqueItems": true
                 }
               },
-              
+              "example": {
+                "results": [
+                  {
+                    "title": "Article Title",
+                    "date": "2015-10-01T08:45:10Z",
+                    "link": "article.com/article-title"
+                  },
+                  {
+                    "title": "Second Article",
+                    "date": "2015-10-01T09:32:11Z",
+                    "link": "article.com/article-number-two"
+                  }
+                ]
+              }
             }
           },
           "400": {
