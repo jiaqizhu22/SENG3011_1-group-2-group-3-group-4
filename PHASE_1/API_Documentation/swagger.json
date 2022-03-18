@@ -74,7 +74,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "articles": {
+                "results": {
                   "type": "array",
                   "items": {
                     "$ref": "#/definitions/SearchResult"
@@ -82,7 +82,20 @@
                   "uniqueItems": true
                 }
               },
-              
+              "example": {
+                "results": [
+                  {
+                    "title": "Article Title",
+                    "date": "2015-10-01T08:45:10Z",
+                    "link": "article.com/article-title"
+                  },
+                  {
+                    "title": "Second Article",
+                    "date": "2015-10-01T09:32:11Z",
+                    "link": "article.com/article-number-two"
+                  }
+                ]
+              }
             }
           },
           "400": {

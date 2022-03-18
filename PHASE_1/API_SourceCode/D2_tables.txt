@@ -1,0 +1,21 @@
+Table Article
+id: int (primary key)
+url: string
+date_of_publication: datetime
+headline: string
+main_text: string
+
+Table Report
+report_id: integer (primary key)
+event_date: datetime
+diseases: string
+syndromes: string
+locations: integer (foreign key reference Location id)
+parent_id: integer (foreign key reference Article id)
+
+Table Location
+id: int (primary key)
+country: string
+location: string 
+
+(google_id: int or geonames_id: int)

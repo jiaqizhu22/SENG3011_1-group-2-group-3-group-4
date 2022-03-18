@@ -36,6 +36,25 @@ Run frontend:
 `poetry run python manage.py runserver`
 
 
+## Create Database
+- Locating to folder:
+`cd PHASE_1/API_SourceCode/`
+- Run poetry virtual environment:
+`poetry shell`
+- Include scraper app:
+`python manage.py makemigrations scraper`
+- Return SQL to corresponding migration names:
+`python manage.py sqlmigrate scraper 0001`
+- Create model tables in my database:
+`python manage.py migrate`
+
+
+## 3-step guide to making model changes
+- Change your models (in models.py).
+- Run  `python manage.py makemigrations` to create migrations for those changes
+- Run `python manage.py migrate` to apply those changes to the database.
+
+
 ## Version Control: Git 
 - Create a new branch: 
 `git checkout -b branch_name` 
