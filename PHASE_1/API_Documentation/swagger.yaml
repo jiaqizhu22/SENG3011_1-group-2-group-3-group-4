@@ -65,10 +65,10 @@ paths:
             example:
               results:
               - title: Article Title
-                date: '2015-10-01T08:45:10'
+                date: '2015-10-01T08:45:10Z'
                 link: article.com/article-title
               - title: Second Article
-                date: '2015-10-01T09:32:11'
+                date: '2015-10-01T09:32:11Z'
                 link: article.com/article-number-two
         '400':
           description: Bad Request
