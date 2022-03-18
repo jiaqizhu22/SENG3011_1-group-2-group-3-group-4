@@ -120,7 +120,7 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
 
     for ind, title in enumerate(outbreakTitles): #loop between the info
         splitTitle = re.split('>|<',str(title))
-        diseaseAndLocation = re.split('-|–|ｰ',str(splitTitle[4]))
+        diseaseAndLocation = re.split('- |– |ｰ ',str(splitTitle[4]))
 
         illness = diseaseAndLocation[0].strip()
         date = splitTitle[8][:-3]
@@ -134,7 +134,7 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
         if len(illness) == 4 and illness.isnumeric(): #if the entry is using the old schema, then do this to get the disease
             #print(re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"})))))
             illness1 = re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"}))))[16]
-            illness2 = re.split('-|–|ｰ|in ',str(illness1))
+            illness2 = re.split('- |– |ｰ | in',str(illness1))
             illness = illness2[0]
             if illness[-1] == ' ':
                 illness = illness[:-1]
@@ -145,7 +145,7 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
             country = diseaseAndLocation[1].strip()
         except:
             t1 = re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"}))))[16]
-            t2 = re.split('-|–|ｰ|in',str(t1))
+            t2 = re.split('- |– |ｰ | in|',str(t1))
             try:
                 country = t2[1]
             except:
@@ -153,13 +153,24 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
 
         # Check if illness is a syndrome or a disease
         isSyndrome = False
+        isDisease = False
         for syndrome in syndrome_set:
             curSyndromeCheck = syndrome.lower()
             if curSyndromeCheck in illness.lower() or illness.lower() in curSyndromeCheck:
-                syndromes.append(illness.strip())
+                #syndromes.append(illness.strip())
+                syndromes.append(syndrome)
                 isSyndrome = True
+                break
                 
-        if isSyndrome is False: # For now, any unrecognised illness is a disease. This may not be to spec.
+        for disease in disease_set:
+            curDiseaseCheck = disease.lower()
+            if curDiseaseCheck in illness.lower() or illness.lower() in curDiseaseCheck:
+                #syndromes.append(illness.strip())
+                diseases.append(disease)
+                isDisease = True
+                break
+                
+        if isSyndrome is False and isDisease is False: # For now, any unrecognised illness is a disease. This may not be to spec.
             diseases.append(illness.strip())
 
 
