@@ -74,10 +74,10 @@ paths:
           description: Bad Request
           schema:
             "$ref": "#/definitions/Error400"
-        '404':
-          description: Page Not Found
+        '405':
+          description: Method Not Allowed
           schema:
-            "$ref": "#/definitions/Error404"
+            "$ref": "#/definitions/Error405"
         '500':
           description: Internal Server Error
           schema:
@@ -136,7 +136,7 @@ definitions:
     example:
       code: 400
       message: 400 Bad Request
-  Error404:
+  Error405:
     type: object
     properties:
       code:
@@ -145,8 +145,8 @@ definitions:
       message:
         type: string
     example:
-      code: 404
-      message: 404 Page Not Found
+      code: 405
+      message: 405 Method Not Allowed
   Error500:
     type: object
     properties:
