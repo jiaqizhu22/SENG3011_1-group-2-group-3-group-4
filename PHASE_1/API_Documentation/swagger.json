@@ -26,8 +26,8 @@
         "tags": [
           "Search"
         ],
-        "summary": "Test the api",
-        "description": "This tests the API",
+        "summary": "Search for articles",
+        "description": "This allows user to search for articles matching the parameters (period, disease, location)",
         "operationId": "getSearch",
         "produces": [
           "application/json"
@@ -70,7 +70,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Search result",
+            "description": "OK",
             "schema": {
               "type": "object",
               "properties": {
@@ -78,29 +78,42 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/definitions/SearchResult"
-                  }
+                  },
+                  "uniqueItems": true
                 }
               },
               "example": {
                 "results": [
                   {
                     "title": "Article Title",
-                    "date": "2015-10-01T08:45:10",
+                    "date": "2015-10-01T08:45:10Z",
                     "link": "article.com/article-title"
                   },
                   {
                     "title": "Second Article",
-                    "date": "2015-10-01T09:32:11",
+                    "date": "2015-10-01T09:32:11Z",
                     "link": "article.com/article-number-two"
                   }
                 ]
               }
             }
           },
-          "default": {
-            "description": "Error",
+          "400": {
+            "description": "Bad Request",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/Error400"
+            }
+          },
+          "404": {
+            "description": "Page Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error404"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error500"
             }
           }
         }
@@ -111,20 +124,81 @@
     "SearchResult": {
       "type": "object",
       "properties": {
-        "title": {
-          "type": "string"
+        "url": {
+          "type": "string",
+          "format": "uri"
         },
-        "date": {
+        "date_of_publication": {
           "type": "string",
           "format": "date-time"
         },
-        "link": {
-          "type": "string",
-          "format": "uri"
+        "headline": {
+          "type": "string"
+        },
+        "main_text": {
+          "type": "string"
+        },
+        "reports": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "properties": {
+              "diseases": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "syndromes": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "event_date": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "locations": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "country": {
+                      "type": "string"
+                    },
+                    "location": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
-    "Error": {
+    "Error400": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "code": 400,
+        "message": "400 Bad Request"
+      }
+    },
+    "Error404": {
       "type": "object",
       "properties": {
         "code": {
@@ -137,7 +211,23 @@
       },
       "example": {
         "code": 404,
-        "message": "404 Not Found"
+        "message": "404 Page Not Found"
+      }
+    },
+    "Error500": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "code": 500,
+        "message": "500 Internal Server Error"
       }
     }
   }
