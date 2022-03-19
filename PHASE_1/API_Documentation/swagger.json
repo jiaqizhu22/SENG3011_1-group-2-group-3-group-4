@@ -60,7 +60,7 @@
             "in": "query",
             "name": "key_terms",
             "description": "Key terms to search for: Searches for entries with ALL of these terms",
-            "required": true,
+            "required": false,
             "type": "array",
             "items": {
               "type": "string"
@@ -83,16 +83,38 @@
                 }
               },
               "example": {
-                "results": [
+                "articles": [
                   {
-                    "title": "Article Title",
-                    "date": "2015-10-01T08:45:10Z",
-                    "link": "article.com/article-title"
+                    "url": "article.com/article-title",
+                    "date_of_publication": "2015-10-01T08:45:10Z",
+                    "headline": "Article Title",
+                    "main_text": "...",
+                    "reports": [
+                      {
+                        "diseases": [
+                          "Alzheimer's Disease",
+                          "one disease",
+                          "two disease"
+                        ],
+                        "syndromes": [
+                          "Dementia",
+                          "red syndrome",
+                          "blue syndrome"
+                        ],
+                        "event_date": "2015-10-01T08:53:11Z",
+                        "locations": [
+                          "Australia",
+                          "Burma"
+                        ]
+                      }
+                    ]
                   },
                   {
-                    "title": "Second Article",
-                    "date": "2015-10-01T09:32:11Z",
-                    "link": "article.com/article-number-two"
+                    "url": "article.com/article-number-two",
+                    "date_of_publication": "2015-10-01T09:32:11Z",
+                    "headline": "Second Article",
+                    "main_text": "...",
+                    "reports": []
                   }
                 ]
               }
