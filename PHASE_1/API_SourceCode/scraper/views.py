@@ -2,7 +2,7 @@ from django.http import HttpRequest, JsonResponse, HttpResponseNotAllowed
 from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
 
-from .scraper import web_scraper
+#from .scraper import web_scraper
 from .models import Articles, Reports, Locations
 from django.utils.timezone import make_aware
 from datetime import datetime
