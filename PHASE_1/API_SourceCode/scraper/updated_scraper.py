@@ -102,7 +102,7 @@ def dateConverter(date):
     year = date[2]
     month = str(list(calendar.month_name).index(date[1])).zfill(2)
     day = date[0].zfill(2)
-    if(year.isdigit() and month.isdigit() and day.isdigit()):
+    if(year.isdigit() and month.isdigit() and day.isdigit() and len(year) == 4 and len(day) <=  2):
         return (year+"-"+month+"-"+day)
     return False
 
@@ -120,7 +120,7 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
 
     for ind, title in enumerate(outbreakTitles): #loop between the info
         splitTitle = re.split('>|<',str(title))
-        diseaseAndLocation = re.split('-|–|ｰ',str(splitTitle[4]))
+        diseaseAndLocation = re.split('- |– |ｰ ',str(splitTitle[4]))
 
         illness = diseaseAndLocation[0].strip()
         date = splitTitle[8][:-3]
@@ -134,7 +134,7 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
         if len(illness) == 4 and illness.isnumeric(): #if the entry is using the old schema, then do this to get the disease
             #print(re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"})))))
             illness1 = re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"}))))[16]
-            illness2 = re.split('-|–|ｰ|in ',str(illness1))
+            illness2 = re.split('- |– |ｰ | in',str(illness1))
             illness = illness2[0]
             if illness[-1] == ' ':
                 illness = illness[:-1]
@@ -145,37 +145,53 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
             country = diseaseAndLocation[1].strip()
         except:
             t1 = re.split('>|<',str(str(currentPage.find_all("li", {"class": "active"}))))[16]
-            t2 = re.split('-|–|ｰ|in',str(t1))
+            t2 = re.split('- |– |ｰ | in|',str(t1))
             try:
                 country = t2[1]
             except:
                 country = ""
 
+        main_text = ""
+        for para in currentPage.find_all("p"):
+            main_text = main_text + (para.get_text().strip())
+
+
         # Check if illness is a syndrome or a disease
         isSyndrome = False
+        isDisease = False
         for syndrome in syndrome_set:
             curSyndromeCheck = syndrome.lower()
-            if curSyndromeCheck in illness.lower() or illness.lower() in curSyndromeCheck:
-                syndromes.append(illness.strip())
+            if curSyndromeCheck in illness.lower() or illness.lower() in curSyndromeCheck or curSyndromeCheck in main_text:
+                #syndromes.append(illness.strip())
+                syndromes.append(syndrome)
                 isSyndrome = True
                 
-        if isSyndrome is False: # For now, any unrecognised illness is a disease. This may not be to spec.
+                
+        for disease in disease_set:
+            curDiseaseCheck = disease.lower()
+            if curDiseaseCheck in illness.lower() or illness.lower() in curDiseaseCheck or curDiseaseCheck in main_text:
+                #syndromes.append(illness.strip())
+                diseases.append(disease)
+                isDisease = True
+                
+                
+        if isSyndrome is False and isDisease is False and "update" not in illness.lower(): # For now, any unrecognised illness is a disease. This may not be to spec.
             diseases.append(illness.strip())
 
 
 
         headline = currentPage.find("h1").get_text().strip()
-        main_text = ""
-        for para in currentPage.find_all("p"):
-            main_text = main_text + (para.get_text().strip())
 
-        indices = [i for i, x in enumerate(main_text.split(" ")) if x in months]
+
+        indices = [i for i, x in enumerate(re.split(' |,',str(main_text))) if x in months]
+        #here we will need to collect all valid datess and make a date range out of them for the event date. For now it
+        #is sonly doing one date 
         for i in indices:
-            theYear = main_text.split(" ")[i+1]
-            if theYear[:-1] == ' ':
-                theYear = theYear[:-1]
-            if(dateConverter(str(main_text.split(" ")[i-1] + " " + main_text.split(" ")[i]+ " " +theYear))):
-                eventDate = (dateConverter(str(main_text.split(" ")[i-1] + " " + main_text.split(" ")[i]+ " " +theYear)))
+            textList = re.split(' |,',str(main_text))
+           # print(textList[i-1] + " " + textList[i]+ " " +textList[i+1].replace(".",""))
+            if(dateConverter(textList[i-1] + " " + textList[i]+ " " +textList[i+1].replace(".",""))):
+                eventDate = dateConverter(textList[i-1] + " " + textList[i]+ " " +textList[i+1].replace(".",""))
+                #print(eventDate)
                 break
             
         
@@ -210,7 +226,7 @@ for pageNum in range(0,150): #change this for the amount of pages to check. if i
         with open('data.json', 'w') as f:
             json.dump(lstBasicInfo, f, indent=2)
 
-       # print(json.dumps(article, indent=2)) #pretty print json to look at
+        #print(json.dumps(article, indent=2)) #pretty print json to look at
 
        # print()
 
