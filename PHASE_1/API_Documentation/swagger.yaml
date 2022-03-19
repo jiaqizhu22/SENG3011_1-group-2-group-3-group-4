@@ -27,13 +27,13 @@ paths:
       parameters:
       - in: query
         name: start_date
-        description: Start date of search range
+        description: Start date of search range (yyyy-mm-dd)
         required: true
         type: string
         format: date-time
       - in: query
         name: end_date
-        description: End date of search range
+        description: End date of search range (yyyy-mm-dd)
         required: true
         type: string
         format: date-time
