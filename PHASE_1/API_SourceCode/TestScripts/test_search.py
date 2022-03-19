@@ -1,4 +1,3 @@
-from random import sample
 import pytest
 from django.test import Client
 import json
