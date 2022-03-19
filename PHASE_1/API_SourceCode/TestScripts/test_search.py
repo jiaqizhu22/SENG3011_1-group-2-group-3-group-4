@@ -167,6 +167,12 @@ def test_search_get_one_valid_oldformat(client: Client):
     # There should be one result for this query
     assert len(parsedData["articles"]) == 1
     
+    article = parsedData["articles"][0]
+    assert article["url"] == "https://www.who.int/emergencies/disease-outbreak-news/item/2003_03_7a-en"
+    assert article["date_of_publication"] == "2003-3-7"
+    assert article["headline"] == "Meningococcal disease in Burkina Faso - Update 3"
+    assert article["main_text"][0:25] == "As of 6 March, the Ministry of Health of Burkina Faso has reported a total"[0:25]
+    
 @pytest.mark.urls('project.urls')
 @pytest.mark.django_db
 def test_search_get_one_valid_newformat(client: Client):
@@ -188,6 +194,12 @@ def test_search_get_one_valid_newformat(client: Client):
     
     # There should be one result for this query
     assert len(parsedData["articles"]) == 1
+    
+    article = parsedData["articles"][0]
+    assert article["url"] == "https://www.who.int/emergencies/disease-outbreak-news/item/cholera-benin"
+    assert article["date_of_publication"] == "2022-1-25"
+    assert article["headline"] == "Cholera – Benin"
+    assert article["main_text"][0:25] == "Cholera is endemic in Benin with cases reported annually since 2016. In 2021, Benin"[0:25]
     
 @pytest.mark.urls('project.urls')
 @pytest.mark.django_db
