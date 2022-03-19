@@ -7,6 +7,8 @@
 - Jiaqi Zhu (z5261703) 
 - William Wan (z5311691) 
 
+## Web Application Homepage Link
+`http://epidemicscraper-env.eba-t2stx6uv.us-east-1.elasticbeanstalk.com`
 
 ## Package Management: Poetry 
 How to Install poetry locally: 
