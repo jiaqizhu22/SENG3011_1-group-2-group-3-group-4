@@ -39,7 +39,7 @@
             "description": "Start date of search range",
             "required": true,
             "type": "string",
-            "format": "date-time"
+            "format": "yyyy-mm-dd"
           },
           {
             "in": "query",
@@ -47,7 +47,7 @@
             "description": "End date of search range",
             "required": true,
             "type": "string",
-            "format": "date-time"
+            "format": "yyyy-mm-dd"
           },
           {
             "in": "query",
