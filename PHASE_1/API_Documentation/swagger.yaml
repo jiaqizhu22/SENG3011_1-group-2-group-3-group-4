@@ -27,13 +27,13 @@ paths:
       parameters:
       - in: query
         name: start_date
-        description: Start date of search range (yyyy-mm-dd)
+        description: Start date of search range (yyyy-mm-dd OR yyyy-mm-ddT00:00:00)
         required: true
         type: string
         format: date-time
       - in: query
         name: end_date
-        description: End date of search range (yyyy-mm-dd)
+        description: End date of search range (yyyy-mm-dd OR yyyy-mm-ddT00:00:00)
         required: true
         type: string
         format: date-time
@@ -46,7 +46,7 @@ paths:
         name: key_terms
         description: 'Key terms to search for: Searches for entries with ALL of these
           terms'
-        required: true
+        required: false
         type: array
         items:
           type: string
@@ -63,21 +63,37 @@ paths:
                   "$ref": "#/definitions/SearchResult"
                 uniqueItems: true
             example:
-              results:
-              - title: Article Title
-                date: '2015-10-01T08:45:10Z'
-                link: article.com/article-title
-              - title: Second Article
-                date: '2015-10-01T09:32:11Z'
-                link: article.com/article-number-two
+              articles:
+              - url: article.com/article-title
+                date_of_publication: '2015-10-01T08:45:10Z'
+                headline: Article Title
+                main_text: '...'
+                reports: 
+                - diseases:
+                    - "Alzheimer's Disease"
+                    - 'one disease'
+                    - 'two disease'
+                  syndromes:
+                    - 'Dementia'
+                    - 'red syndrome'
+                    - 'blue syndrome'
+                  event_date: '2015-10-01T08:53:11Z'
+                  locations: 
+                    - 'Australia'
+                    - 'Burma'
+              - url: article.com/article-number-two
+                date_of_publication: '2015-10-01T09:32:11Z'
+                headline: Second Article
+                main_text: '...'
+                reports: []
         '400':
           description: Bad Request
           schema:
             "$ref": "#/definitions/Error400"
-        '404':
-          description: Page Not Found
+        '405':
+          description: Method Not Allowed
           schema:
-            "$ref": "#/definitions/Error404"
+            "$ref": "#/definitions/Error405"
         '500':
           description: Internal Server Error
           schema:
@@ -136,7 +152,7 @@ definitions:
     example:
       code: 400
       message: 400 Bad Request
-  Error404:
+  Error405:
     type: object
     properties:
       code:
@@ -145,8 +161,8 @@ definitions:
       message:
         type: string
     example:
-      code: 404
-      message: 404 Page Not Found
+      code: 405
+      message: 405 Method Not Allowed
   Error500:
     type: object
     properties:

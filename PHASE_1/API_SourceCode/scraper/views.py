@@ -1,8 +1,8 @@
-from django.http import HttpRequest, JsonResponse, HttpResponseNotAllowed
+from django.http import HttpRequest, JsonResponse, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
 
-from .scraper import web_scraper
+#from .scraper import web_scraper
 from .models import Articles, Reports, Locations
 from django.utils.timezone import make_aware
 from datetime import datetime
@@ -37,8 +37,21 @@ def search(request: HttpRequest):
     if request.method != "GET":
         return HttpResponseNotAllowed(request.method + " requests not allowed")
     
-    start_date = make_aware(parse_datetime(request.GET.get("start_date")))
-    end_date = make_aware(parse_datetime(request.GET.get("end_date")))
+    valid_request = "start_date" in request.GET and "end_date" in request.GET and "location" in request.GET
+    
+    if not valid_request:
+        return HttpResponseBadRequest("Invalid input: refer to documentation")
+    
+    start_date = parse_datetime(request.GET.get("start_date"))
+    end_date = parse_datetime(request.GET.get("end_date"))
+    
+    valid_request = valid_request and start_date is not None and end_date is not None
+    
+    if not valid_request:
+        return HttpResponseBadRequest("Invalid input: refer to documentation")
+    
+    start_date = make_aware(start_date)
+    end_date = make_aware(end_date)
     
     #mid_date = start_date + (end_date - start_date) / 2
     #date_str = mid_date.strftime("%Y-%m-%dT%H:%M:%S")
