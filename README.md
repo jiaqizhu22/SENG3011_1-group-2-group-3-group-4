@@ -10,6 +10,8 @@
 ## Web Application Homepage Link
 `http://epidemicscraper-env.eba-t2stx6uv.us-east-1.elasticbeanstalk.com`
 
+### WARNING: Unfortunately, the deployed webpage uses a database that is unsupported by the system. While this is being fixed, to test the API, change the `"host"` value in `PHASE_1/API_Documentation/swagger.json` to `"127.0.0.1:8000"` and run the server locally.
+
 ## Package Management: Poetry 
 How to Install poetry locally: 
 `pip install poetry`
