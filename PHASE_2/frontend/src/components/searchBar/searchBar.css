@@ -1,7 +1,9 @@
+@import url("https://cdn.syncfusion.com/ej2/material.css");
+
 .searchBar {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 0px;
   background: #6A6869;
   text-align: left;
   font-size: 20px;
@@ -10,3 +12,18 @@
   top: 70px;
 }
 
+.column {
+  flex: 33.33%;
+  height: 30px;
+  margin: 0px;
+  padding-left: 20px;
+  background-color: #cccccc;
+  text-align: center;
+  padding: 10px;
+  vertical-align: middle;
+  
+}
+.container {
+   display: flex;
+   width: 100%;
+}	
