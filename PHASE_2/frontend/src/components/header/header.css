@@ -1,5 +1,18 @@
 .header {
-  padding: 20px;
-  background: blue;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background: #ffffff;
+  text-align: left;
+  font-weight: bold;
+  font-size: 20px;
+  color: #282C34;
+  position: sticky;
+  top: 0px;
 }
+
+.photo {
+    height: 60px;
+    width: 60px;
+    padding-right: 50px;
+  }

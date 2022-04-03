@@ -1,10 +1,14 @@
 import React from 'react';
 import './header.css';
-import logos from './unswLogo.png';
 
 const Header = () => (
     <div className="header">
-      <img src={logos} alt="Group 1 Group 2 Group 3 Group 4" />
+     <img 
+      className="photo"
+      src="https://www.inside.unsw.edu.au/sites/default/files/inline-images/crest.jpg"
+      alt="1 Group 2 Group 3 Group 4"
+      />
+      1 Group 2 Group 3 Group 4
     </div>
   )
 export default Header;
