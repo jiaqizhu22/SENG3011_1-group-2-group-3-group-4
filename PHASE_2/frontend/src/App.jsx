@@ -10,7 +10,12 @@ function App() {
       <SearchBar />
       <header className="App-header">
          
-      App 1 App 2 App 3
+      Results!
+
+      <div id="crap">
+
+      </div>
+
       </header>
     </div>
   );
