@@ -1,17 +1,20 @@
 import React from 'react';
 
-const ArticleContainer = ( {url, date, headline, maintext, reports} ) => {
-    console.log(url);
-
+const ArticleContainer = ( {url, date, headline, main_text, reports} ) => {
     return (
         <div className='article'>
             <h1>{headline}</h1>
             <h2>Date of publication: {date}</h2>
             <h2>Url: {url}</h2>
             <br/>
-            <p>Main text: {maintext}</p>
+            <p>Main text: {main_text}</p>
             <br/>
-            {reports.map((report) => (
+        </div>
+    );
+};
+
+/* be careful putting this back in, it breaks stuff because location doesn't turn into a string properly
+{reports.map((report) => (
                 <div className='report'>
                     diseases: {report.diseases}
                     <br/>
@@ -23,7 +26,30 @@ const ArticleContainer = ( {url, date, headline, maintext, reports} ) => {
                     <br/>
                 </div>
             ))}
-        </div>
-    );
-};
-export default ArticleContainer;
+*/
+
+class ArticleList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          articles: [],
+        };
+      }
+
+    doRender() {
+        console.log(this.state.articles);
+        
+    }
+    
+    render() {
+        if (this.state.articles.length > 0)
+            return this.state.articles[0];
+
+        return null;
+    }
+}
+
+const articleListSingleton = new ArticleList();
+export {ArticleContainer, articleListSingleton};
+
+export default ArticleList;
