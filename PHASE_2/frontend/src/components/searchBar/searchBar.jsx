@@ -1,10 +1,10 @@
 import React from 'react';
 import './searchBar.css';
-import {useState} from 'react'
+import {useState} from 'react';
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
 import apiFetch from '../../index.js';
-
-
+import ArticleContainer from '../container/article';
+//import ReportContainer from '../container/report';
 
 
 const country_list = [
@@ -203,7 +203,8 @@ const country_list = [
   "Vietnam",
   "Yemen",
   "Zambia",
-  "Zimbabwe"]
+  "Zimbabwe"
+];
 
 const disease_set = [
   "unknown",
@@ -284,8 +285,35 @@ const disease_set = [
   "Fever of unknown Origin",
   "Encephalitis",
   "Meningitis",
-]
+];
 
+
+
+
+
+function populateArticles(articleObjects) {
+  
+  var articleBoxes = [];
+  for(var obj of articleObjects){
+
+    //theDiv.innerHTML += "<br />";
+    //theDiv.innerHTML += "--------------------------------";
+    //theDiv.innerHTML += "<br />";
+    //console.log(obj["article"]);
+    //const article = JSON.stringify(obj);
+    //console.log(article["article"]);
+    const a1 = ArticleContainer(obj["article"]);
+    articleBoxes.push(a1);
+    //console.log(a1);
+    
+    //document.getElementById("crap").appendChild(a1);
+    //theDiv.innerHTML += JSON.stringify(obj); //replace with nice looking component
+    //theDiv.innerHTML += "<br />";
+    //theDiv.innerHTML += "--------------------------------";
+    //theDiv.innerHTML += "<br />";
+  };
+  return articleBoxes;
+};
 
 
 
@@ -300,6 +328,14 @@ function submitForms(){
   
   var promiseArr = []
   var results = [];
+  //const [articles, setArticles] = useState([]);
+  //const showResult = (
+  //  <div id="crap">
+  //    {articles}
+  //  </div>
+  //);
+
+
   //alert(location.value + keyTerms.value + dates.value);
   if(location === ""){
     alert("Location can not be empty");
@@ -314,31 +350,25 @@ function submitForms(){
   }else{
     promiseArr.push(apiFetch(end_date,start_date,key_terms,location).then((data) => {(results.push(data));}));
     Promise.all(promiseArr).then((data) => {
-      var theDiv = document.getElementById("crap");
-
-      for(var obj of results[0]["articles"]){
-        theDiv.innerHTML += "<br />";
-        theDiv.innerHTML += "--------------------------------";
-        theDiv.innerHTML += "<br />";
-        theDiv.innerHTML += JSON.stringify(obj); //replace with nice looking component
-        theDiv.innerHTML += "<br />";
-        theDiv.innerHTML += "--------------------------------";
-        theDiv.innerHTML += "<br />";
+      
+      var articleBoxes = populateArticles(results[0]["articles"]);
+      for (var a of articleBoxes) {
+        document.getElementById("crap").appendChild(a);
       }
-
       
       
+      /*
+      if (document.getElementById("crap") !== null) {
+        document.getElementById("crap").remove();
+      } else {
+        document.getElementsByClassName("App-header").appendChild(showResult);
+      }
+      */
       (console.log(results));
-    
-    
-    
     
     
     });
   }
-
-  
-
   //console.log(results)
   
 }

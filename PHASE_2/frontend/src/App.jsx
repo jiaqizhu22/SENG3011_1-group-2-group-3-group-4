@@ -1,8 +1,10 @@
 import './App.css';
 import React from 'react';
 
-import Header from './components/header/header.jsx'
-import SearchBar from './components/searchBar/searchBar.jsx'
+import Header from './components/header/header.jsx';
+import SearchBar from './components/searchBar/searchBar.jsx';
+import Crap from './components/container/crap';
+
 function App() {
   return (
     <div className="App">
@@ -10,11 +12,9 @@ function App() {
       <SearchBar />
       <header className="App-header">
          
-      Results!
-
-      <div id="crap">
-
-      </div>
+        Results!
+        <Crap />
+        
 
       </header>
     </div>

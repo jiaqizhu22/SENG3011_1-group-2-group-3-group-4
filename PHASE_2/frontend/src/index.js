@@ -35,4 +35,4 @@ const apiFetch = (end_date, start_date, key_terms, location) => {
   });
 }
 
-export default apiFetch
+export default apiFetch;
