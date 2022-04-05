@@ -300,6 +300,7 @@ class SearchBar extends React.Component {
         this.changeLocation = this.changeLocation.bind(this);
         this.changeKeyTerms = this.changeKeyTerms.bind(this);
         this.submitForms = this.submitForms.bind(this);
+        this.resetScore = this.resetScore.bind(this);
         this.state = {
             startDate: null,
             endDate: null,
@@ -321,6 +322,11 @@ class SearchBar extends React.Component {
         this.setState({key_terms: kt.target.value});
     }
 
+    resetScore() {
+      localStorage.setItem('userPoints', 0);
+      window.location.reload(false);
+    }
+
     submitForms() {
     
         var location = this.state.location;
@@ -340,6 +346,15 @@ class SearchBar extends React.Component {
         }else if (key_terms === ""){
             alert("Key Terms can not be empty");
         }else{
+            //give the user a point every time they search successfully
+            // Get
+            var currentPoints = localStorage.getItem('userPoints');
+            if (currentPoints === null){
+              currentPoints = 0
+            }
+            // Set
+            localStorage.setItem('userPoints', parseInt(currentPoints) + 1);
+
             console.log("started loading");
             document.getElementById("NoResults").hidden = true;
             document.getElementById("LoadingIndicator").hidden = false;
@@ -383,7 +398,9 @@ class SearchBar extends React.Component {
                     <button onClick={this.submitForms}>
                         Submit
                     </button>
-
+                    <button onClick={this.resetScore}>
+                        Reset Your Score
+                    </button>
                 </div>
             </div>
         )

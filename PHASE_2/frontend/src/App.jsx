@@ -32,13 +32,15 @@ class MainApp extends React.Component {
       document.getElementById("NoResults").hidden = false;
     }
   }
-
+//remove line 43 to remove score treacking. right now the user can get a score each time they do a successful search
   render() {
     return (
       <div className="App">
+        
         <Header />
         <SearchBar setArticles={this.setArticles.bind(this)}/>
         <header className="App-header">
+          Your current score is: {localStorage.getItem('userPoints')} 
           <LoadingIndicator/>
           <NoResults/>
           {this.state.articles}
