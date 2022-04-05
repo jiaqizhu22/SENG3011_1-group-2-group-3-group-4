@@ -135,7 +135,7 @@ const SearchBar = (props) => {
                     }
                 }
                 >
-                    Search
+                    {searching?"Searching":"Search"}
                 </Button>
             </Grid>
             
