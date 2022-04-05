@@ -337,7 +337,8 @@ class SearchBar extends React.Component {
         }else if (key_terms === ""){
             alert("Key Terms can not be empty");
         }else{
-            promiseArr.push(apiFetch(end_date,start_date,key_terms,location).then((data) => {(results.push(data));}));
+            var LocUpper = location.charAt(0).toUpperCase() + location.slice(1)
+            promiseArr.push(apiFetch(end_date,start_date,key_terms.toLowerCase(),LocUpper).then((data) => {(results.push(data));}));
             Promise.all(promiseArr).then((data) => {
                 var articleBoxes = [];
                 for(var obj of results[0]["articles"]){
