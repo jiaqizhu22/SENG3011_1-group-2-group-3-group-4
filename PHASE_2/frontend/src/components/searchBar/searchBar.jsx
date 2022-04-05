@@ -99,7 +99,7 @@ const SearchBar = (props) => {
                 onChange={(newValue) => {
                     setStartDate(newValue);
                 }}
-                renderInput={(props) => <TextField sx={{width:"30%"}} className="TextField" {...props} />}
+                renderInput={(props) => <TextField sx={{width:"30%"}} {...props} />}
             />
             <Box sx={{mx: 2}}>to</Box>
             <DatePicker
@@ -108,7 +108,7 @@ const SearchBar = (props) => {
                 onChange={(newValue) => {
                     setEndDate(newValue);
                 }}
-                renderInput={(props) => <TextField {...props} />}
+                renderInput={(props) => <TextField sx={{width:"30%"}} {...props} />}
             />
             <TextField sx={{mx: 4, width:"50%"}} id="keyTerms" label="Key Terms (Separated by comma)" variant="standard" 
             value={keyTerms}
