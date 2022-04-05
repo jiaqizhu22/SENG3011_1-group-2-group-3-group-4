@@ -12,7 +12,7 @@ import { format, subYears } from 'date-fns'
 
 const apiFetch = (end_date, start_date, key_terms, location) => { 
 
-    if (location == null || typeof location != "string") {
+    if (location == null || typeof location != "string" || location === "") {
         alert("Country cannot be empty.");
         return;
     }
@@ -116,12 +116,16 @@ const SearchBar = (props) => {
                     disabled={searching}
                     onClick={() => {
                         setSearching(true);
-                        var apiRet = apiFetch(endDate, startDate, keyTerms, props.country).then((data) => {
-                            if (data != null)
-                                props.setArticles(data.articles);
+                        var apiRet = apiFetch(endDate, startDate, keyTerms, props.country)
 
-                            setSearching(false);
-                        });
+                        if (apiRet != null) {
+                            apiRet.then((data) => {
+                                if (data != null)
+                                    props.setArticles(data.articles);
+    
+                                setSearching(false);
+                            });
+                        }
                     }
                 }
                 >
