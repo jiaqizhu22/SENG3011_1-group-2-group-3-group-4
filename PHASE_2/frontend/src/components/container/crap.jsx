@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Crap = () => {
+const Main = () => {
     //const [results, setResults] = useState(false);
     return (
         <div id="crap">
