@@ -6,11 +6,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import Divider from '@mui/material/Divider';
 import { format } from 'date-fns'
 
-function renderArticleEntry(url, date, headline) {
+function renderArticleEntry(url, date, headline, numArticleClicks, setNumArticleClicks) {
     return (
-        <ListItem button component="a" href={url} target="_blank" rel="noopener noreferrer">
+        <ListItem button component="a" href={url} target="_blank" rel="noopener noreferrer"
+            onClick={() => {
+                setNumArticleClicks(numArticleClicks + 1);
+            }}
+        >
             <ListItemIcon>
                 <TravelExploreIcon/>
             </ListItemIcon>
@@ -32,7 +37,8 @@ function ArticleList(props) {
         var date = format(new Date(obj.article.date_of_publication), "yyyy-MM-dd");
         var headline = obj.article.headline;
 
-        articleEntries.push(renderArticleEntry(url, date, headline));
+        articleEntries.push(renderArticleEntry(url, date, headline, props.numArticleClicks, props.setNumArticleClicks));
+        articleEntries.push(<Divider />);
     }
 
     

@@ -10,11 +10,11 @@ import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { format, subYears } from 'date-fns'
 
-const apiFetch = (end_date, start_date, key_terms, location) => { 
+const apiFetch = (end_date, start_date, key_terms, location, setSearching, setNumSearches, numSearches) => { 
 
     if (location == null || typeof location != "string" || location === "") {
         alert("Country cannot be empty.");
-        return;
+        return null;
     }
 
     if (end_date == null) {
@@ -33,7 +33,9 @@ const apiFetch = (end_date, start_date, key_terms, location) => {
     start_date = format(start_date, "yyyy-MM-dd");
     
     var url = `https://seng3011-bobby-tables-backend.herokuapp.com/article?end_date=${end_date}T00%3A00%3A00&start_date=${start_date}T00%3A00%3A00&key_terms=${key_terms}&location=${location}&limit=1000&offset=0`;
-    console.log(url)
+    console.log(url);
+
+    setSearching(true);
     
     return new Promise((resolve, reject) => {
         fetch(url)
@@ -50,8 +52,13 @@ const apiFetch = (end_date, start_date, key_terms, location) => {
             } else {
                 reject("Error: " + response.status + " response received!");
             }
+
+            setSearching(false);
+            setNumSearches(numSearches + 1);
         })
         .catch((err) => {
+            setSearching(false);
+            setNumSearches(numSearches + 1);
             console.log(err)
             resolve(null);
         });
@@ -115,8 +122,7 @@ const SearchBar = (props) => {
                 <Button
                     disabled={searching}
                     onClick={() => {
-                        setSearching(true);
-                        var apiRet = apiFetch(endDate, startDate, keyTerms, props.country)
+                        var apiRet = apiFetch(endDate, startDate, keyTerms, props.country, setSearching, props.setNumSearches, props.numSearches)
 
                         if (apiRet != null) {
                             apiRet.then((data) => {
