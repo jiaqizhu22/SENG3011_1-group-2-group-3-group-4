@@ -326,12 +326,15 @@ class SearchBar extends React.Component {
         var location = this.state.location;
         var key_terms = this.state.key_terms;
 
-        var end_date = format(this.state.endDate, "yyyy-MM-dd");
-        var start_date = format(this.state.startDate, "yyyy-MM-dd");
-        
+        try{
+          var end_date = format(this.state.endDate, "yyyy-MM-dd");
+          var start_date = format(this.state.startDate, "yyyy-MM-dd");
+        }catch{
+          alert("Date can not be empty");
+          return
+        }
         var promiseArr = []
         var results = [];
-    
         if(location === ""){
             alert("Location can not be empty");
         }else if (key_terms === ""){
