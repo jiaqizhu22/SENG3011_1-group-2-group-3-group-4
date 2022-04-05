@@ -337,6 +337,9 @@ class SearchBar extends React.Component {
         }else if (key_terms === ""){
             alert("Key Terms can not be empty");
         }else{
+            console.log("started loading");
+            document.getElementById("NoResults").hidden = true;
+            document.getElementById("LoadingIndicator").hidden = false;
             var LocUpper = location.charAt(0).toUpperCase() + location.slice(1)
             promiseArr.push(apiFetch(end_date,start_date,key_terms.toLowerCase(),LocUpper).then((data) => {(results.push(data));}));
             Promise.all(promiseArr).then((data) => {
@@ -346,7 +349,8 @@ class SearchBar extends React.Component {
                 };
 
                 
-
+                console.log("finished loading");
+                document.getElementById("LoadingIndicator").hidden = true;
                 this.props.setArticles(articleBoxes);
             });
         }
