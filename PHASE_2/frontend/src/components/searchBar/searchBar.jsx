@@ -1,385 +1,137 @@
-import React from 'react';
 import './searchBar.css';
-import {useState} from 'react';
-import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
-import { format } from "date-fns";
-import apiFetch from '../../index.js';
-import {ArticleContainer} from '../container/article';
-//import ReportContainer from '../container/report';
 
+import React, {useState} from 'react';
 
-const country_list = [
-    "Afghanistan",
-    "Albania",
-    "Algeria",
-    "Andorra",
-    "Angola",
-    "Antigua and Barbuda",
-    "Argentina",
-    "Armenia",
-    "Australia",
-    "Austria",
-    "Azerbaijan",
-    "The Bahamas",
-    "Bahrain",
-    "Bangladesh",
-    "Barbados",
-    "Belarus",
-    "Belgium",
-    "Belize",
-    "Benin",
-    "Bhutan",
-    "Bolivia",
-    "Bosnia and Herzegovina",
-    "Botswana",
-    "Brazil",
-    "Brunei",
-    "Bulgaria",
-    "Burkina Faso",
-    "Burundi",
-    "Cabo Verde",
-    "Cambodia",
-    "Cameroon",
-    "Canada",
-    "Central African Republic",
-    "Chad",
-    "Chile",
-    "China",
-    "Colombia",
-    "Comoros",
-    "Congo, Democratic Republic of the",
-    "Congo, Republic of the",
-    "Costa Rica",
-    "Côte d’Ivoire",
-    "Croatia",
-    "Cuba",
-    "Cyprus",
-    "Czech Republic",
-    "Denmark",
-    "Djibouti",
-    "Dominica",
-    "Dominican Republic",
-    "East Timor (Timor-Leste)",
-    "Ecuador",
-    "Egypt",
-    "El Salvador",
-    "Equatorial Guinea",
-    "Eritrea",
-    "Estonia",
-    "Eswatini",
-    "Ethiopia",
-    "Fiji",
-    "Finland",
-    "France",
-    "Gabon",
-    "The Gambia",
-    "Georgia",
-    "Germany",
-    "Ghana",
-    "Greece",
-    "Grenada",
-    "Guatemala",
-    "Guinea",
-    "Guinea-Bissau",
-    "Guyana",
-    "Haiti",
-    "Honduras",
-    "Hungary",
-    "Iceland",
-    "India",
-    "Indonesia",
-    "Iran",
-    "Iraq",
-    "Ireland",
-    "Israel",
-    "Italy",
-    "Jamaica",
-    "Japan",
-    "Jordan",
-    "Kazakhstan",
-    "Kenya",
-    "Kiribati",
-    "Korea, North",
-    "Korea, South",
-    "Kosovo",
-    "Kuwait",
-    "Kyrgyzstan",
-    "Laos",
-    "Latvia",
-    "Lebanon",
-    "Lesotho",
-    "Liberia",
-    "Libya",
-    "Liechtenstein",
-    "Lithuania",
-    "Luxembourg",
-    "Madagascar",
-    "Malawi",
-    "Malaysia",
-    "Maldives",
-    "Mali",
-    "Malta",
-    "Marshall Islands",
-    "Mauritania",
-    "Mauritius",
-    "Mexico",
-    "Micronesia, Federated States of",
-    "Moldova",
-    "Monaco",
-    "Mongolia",
-    "Montenegro",
-    "Morocco",
-    "Mozambique",
-    "Myanmar (Burma)",
-    "Namibia",
-    "Nauru",
-    "Nepal",
-    "Netherlands",
-    "New Zealand",
-    "Nicaragua",
-    "Niger",
-    "Nigeria",
-    "North Macedonia",
-    "Norway",
-    "Oman",
-    "Pakistan",
-    "Palau",
-    "Panama",
-    "Papua New Guinea",
-    "Paraguay",
-    "Peru",
-    "Philippines",
-    "Poland",
-    "Portugal",
-    "Qatar",
-    "Romania",
-    "Russia",
-    "Rwanda",
-    "Saint Kitts and Nevis",
-    "Saint Lucia",
-    "Saint Vincent and the Grenadines",
-    "Samoa",
-    "San Marino",
-    "Sao Tome and Principe",
-    "Saudi Arabia",
-    "Senegal",
-    "Serbia",
-    "Seychelles",
-    "Sierra Leone",
-    "Singapore",
-    "Slovakia",
-    "Slovenia",
-    "Solomon Islands",
-    "Somalia",
-    "South Africa",
-    "Spain",
-    "Sri Lanka",
-    "Sudan",
-    "Sudan, South",
-    "Suriname",
-    "Sweden",
-    "Switzerland",
-    "Syria",
-    "Taiwan",
-    "Tajikistan",
-    "Tanzania",
-    "Thailand",
-    "Togo",
-    "Tonga",
-    "Trinidad and Tobago",
-    "Tunisia",
-    "Turkey",
-    "Turkmenistan",
-    "Tuvalu",
-    "Uganda",
-    "Ukraine",
-    "United Arab Emirates",
-    "United Kingdom",
-    "United States",
-    "Uruguay",
-    "Uzbekistan",
-    "Vanuatu",
-    "Vatican City",
-    "Venezuela",
-    "Vietnam",
-    "Yemen",
-    "Zambia",
-    "Zimbabwe"
-];
+import TextField from '@mui/material/TextField';
+import DatePicker from '@mui/lab/DatePicker'
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { format, subYears } from 'date-fns'
 
-const disease_set = [
-    "unknown",
-    "other",
-    "anthrax cutaneous",
-    "anthrax gastrointestinous",
-    "anthrax inhalation",
-    "botulism",
-    "brucellosis",
-    "chikungunya",
-    "cholera",
-    "cryptococcosis",
-    "cryptosporidiosis",
-    "crimean-congo haemorrhagic fever",
-    "dengue",
-    "diphteria",
-    "ebola haemorrhagic fever",
-    "ehec (e.coli)",
-    "enterovirus 71 infection",
-    "influenza a/h5n1",
-    "influenza a/h7n9",
-    "influenza a/h9n2",
-    "influenza a/h1n1",
-    "influenza a/h1n2",
-    "influenza a/h3n5",
-    "influenza a/h3n2",
-    "influenza a/h2n2",
-    "hand, foot and mouth disease",
-    "hantavirus",
-    "hepatitis a",
-    "hepatitis b",
-    "hepatitis c",
-    "hepatitis d",
-    "hepatitis e",
-    "histoplasmosis",
-    "hiv/aids",
-    "lassa fever",
-    "malaria",
-    "marburg virus disease",
-    "measles",
-    "mers-cov",
-    "mumps",
-    "nipah virus",
-    "norovirus infection",
-    "pertussis",
-    "plague",
-    "pneumococcus pneumonia",
-    "poliomyelitis",
-    "q fever",
-    "rabies",
-    "rift valley fever",
-    "rotavirus infection",
-    "rubella",
-    "salmonellosis",
-    "sars",
-    "shigellosis",
-    "smallpox",
-    "staphylococcal enterotoxin b",
-    "thypoid fever",
-    "tuberculosis",
-    "tularemia",
-    "vaccinia and cowpox",
-    "varicella",
-    "west nile virus",
-    "yellow fever",
-    "yersiniosis",
-    "zika",
-    "legionares",
-    "listeriosis",
-    "monkeypox",
-    "COVID-19",
-    "Haemorrhagic Fever",
-    "Acute Flacid Paralysis",
-    "Acute gastroenteritis",
-    "Acute respiratory syndrome",
-    "Influenza-like illness",
-    "Acute fever and rash",
-    "Fever of unknown Origin",
-    "Encephalitis",
-    "Meningitis",
-];
+const apiFetch = (end_date, start_date, key_terms, location) => { 
 
-
-
-
-
-class SearchBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.setArticles = props.setArticles;
-        this.changeDates = this.changeDates.bind(this);
-        this.changeLocation = this.changeLocation.bind(this);
-        this.changeKeyTerms = this.changeKeyTerms.bind(this);
-        this.submitForms = this.submitForms.bind(this);
-        this.state = {
-            startDate: null,
-            endDate: null,
-            location: "",
-            key_terms: "",
-        }
+    if (location == null || typeof location != "string") {
+        alert("Country cannot be empty.");
+        return;
     }
 
-    changeDates(inDate) {
-        this.setState({startDate: inDate.startDate});
-        this.setState({endDate: inDate.endDate});
+    if (end_date == null) {
+        end_date = new Date();
     }
 
-    changeLocation(loc) {
-        this.setState({location: loc.target.value});
+    if (start_date == null) {
+        start_date = subYears(new Date(), 20); // Default to 20 years ago
     }
 
-    changeKeyTerms(kt) {
-        this.setState({key_terms: kt.target.value});
+    if (key_terms == null || typeof location != "string" || key_terms === "") {
+        key_terms = "outbreak";
     }
 
-    submitForms() {
+    end_date = format(end_date, "yyyy-MM-dd");
+    start_date = format(start_date, "yyyy-MM-dd");
     
-        var location = this.state.location;
-        var key_terms = this.state.key_terms;
-
-        var end_date = format(this.state.endDate, "yyyy-MM-dd");
-        var start_date = format(this.state.startDate, "yyyy-MM-dd");
-        
-        var promiseArr = []
-        var results = [];
+    var url = `https://seng3011-bobby-tables-backend.herokuapp.com/article?end_date=${end_date}T00%3A00%3A00&start_date=${start_date}T00%3A00%3A00&key_terms=${key_terms}&location=${location}&limit=1000&offset=0`;
+    console.log(url)
     
-        if(location === ""){
-            alert("Location can not be empty");
-        }else if (key_terms === ""){
-            alert("Key Terms can not be empty");
-        }else{
-            promiseArr.push(apiFetch(end_date,start_date,key_terms,location).then((data) => {(results.push(data));}));
-            Promise.all(promiseArr).then((data) => {
-                var articleBoxes = [];
-                for(var obj of results[0]["articles"]){
-                    articleBoxes.push(new ArticleContainer(obj["article"]));
-                };
+    return new Promise((resolve, reject) => {
+        fetch(url)
+        .then((response) => {
+            if (response.status === 400 || response.status === 403) {
+                response.json().then((errorMsg) => {
+                    alert(errorMsg['error']);
+                    reject(errorMsg['error']);
+                });
+            }else if(response.status === 200) {
+                response.json().then(data => {
+                    resolve(data);
+                });
+            } else {
+                reject("Error: " + response.status + " response received!");
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            resolve(null);
+        });
+    });
+}
 
-                
 
-                this.props.setArticles(articleBoxes);
-            });
-        }
-    }
+const SearchBar = (props) => {
+    const [startDate, setStartDate] = useState(null);     
+    const [endDate, setEndDate] = useState(null); 
+    const [keyTerms, setKeyTerms] = useState(null); 
+    const [searching, setSearching] = useState(false);
 
-    render() {
-        return (
-            <div className="searchBar">
-                <div class="container">
-                    <div class="column">
-                    <DateRangePickerComponent change={this.changeDates} dateformat='yyyy-MM-dd' id="datetimepicker" placeholder="Enter date range: "></DateRangePickerComponent>
-                    </div>
-                    <div class="column">
-                        <form>
-                            <label> 
-                                <input onChange={this.changeLocation} placeholder="Location" type="text" id="location" style={{width: "370px"}}/>
-                            </label>
-                        </form>
-                    </div>
-                    <div class="column">
-                    <form>
-                            <label>
-                                <input onChange={this.changeKeyTerms} placeholder="Key terms seperated by commas" type="text" id="keyterms" style={{width: "370px"}}/>
-                            </label>
-                        </form>
-                    </div>
-                    <button onClick={this.submitForms}>
-                        Submit
-                    </button>
+    const darkTheme = createTheme({
+        palette: {
+          mode: 'dark',
+        },
+      });
 
-                </div>
-            </div>
-        )
-    }
+    return (
+    <ThemeProvider theme={darkTheme}>
+        <div className = "searchBar" style={{paddingTop: "1%", paddingBottom: "1%"}}>
+            <TextField sx={{mx: 4, width:"30%"}} id="countrySearch" label="Country" variant="standard" 
+            value={props.country}
+            placeholder="Country"
+            onChange={(event) => {
+                const {value} = event.target;
+                props.setCountry(value);
+            }}
+            InputLabelProps={{ shrink: true }}
+            />
+            <DatePicker
+                clearable
+                label="Start Date"
+                value={startDate}
+                format="dd-MM-yyyy"
+
+                onChange={(newValue) => {
+                    setStartDate(newValue);
+                }}
+                renderInput={(props) => <TextField sx={{width:"30%"}} className="TextField" {...props} />}
+            />
+            <Box sx={{mx: 2}}>to</Box>
+            <DatePicker
+                label="End Date"
+                value={endDate}
+                onChange={(newValue) => {
+                    setEndDate(newValue);
+                }}
+                renderInput={(props) => <TextField {...props} />}
+            />
+            <TextField sx={{mx: 4, width:"50%"}} id="keyTerms" label="Key Terms (Separated by comma)" variant="standard" 
+            value={keyTerms}
+            onChange={(event) => {
+                const {value} = event.target;
+                setKeyTerms(value);
+            }}
+            />
+
+            <Grid container justifyContent="flex-end" sx={{mx: 2, width:"10%"}}>
+                <Button
+                    disabled={searching}
+                    onClick={() => {
+                        setSearching(true);
+                        var apiRet = apiFetch(endDate, startDate, keyTerms, props.country).then((data) => {
+                            if (data != null)
+                                props.setArticles(data.articles);
+
+                            setSearching(false);
+                        });
+                    }
+                }
+                >
+                    Search
+                </Button>
+            </Grid>
+            
+        </div>
+    </ThemeProvider>
+    );
 }
 
 

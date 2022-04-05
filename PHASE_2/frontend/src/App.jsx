@@ -1,43 +1,36 @@
 import './App.css';
-import React from 'react';
+import React, {useState} from 'react';
 
-import Header from './components/header/header.jsx';
-import SearchBar from './components/searchBar/searchBar.jsx';
-import ArticleList from './components/container/article';
+import HeaderBar from './components/header/header'
+import ArticleList from './components/articles/articleList';
+import MapView from './components/map/mapView';
+import SearchBar from './components/searchBar/searchBar'
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import ReactTooltip from "react-tooltip";
 
-class MainApp extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      articles: []
-    }
-  }
-
-  setArticles(artList) {
-    this.setState({articles: artList});
-    console.log(artList.length);
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <Header />
-        <SearchBar setArticles={this.setArticles.bind(this)}/>
-        <header className="App-header">
-  
-          {this.state.articles}
-          
-  
-        </header>
-      </div>
-    );
-  }
-}
 
 function App() {
-  return (
-    <MainApp />
-  );
+    const [articles, setArticles] = useState([]);
+    const [hoveringCountry, setHovering] = useState("");
+    const [countryClicked, setCountry] = useState(null);
+
+    return (
+        <div className="App">
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <header>
+                    <HeaderBar/>
+                </header>
+
+                <main>
+                    <SearchBar setArticles={setArticles} setCountry={setCountry} country={countryClicked}/>
+                    <ArticleList articles={articles} />
+                    <MapView articles={articles} setHovering={setHovering} setCountry={setCountry}/>
+                    <ReactTooltip>{hoveringCountry}</ReactTooltip>
+                </main>
+            </LocalizationProvider>
+        </div>
+    );
 }
 
 export default App;
