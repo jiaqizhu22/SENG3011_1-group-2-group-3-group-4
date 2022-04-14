@@ -75,8 +75,10 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mydb',
         'OPTIONS': {
             'read_default_file': 'my.cnf',
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
         }
     }
 }
