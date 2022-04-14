@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %}<title>Epidemic API Homepage</title>{% endblock %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+    <h1>Epidemic API Homepage</h1>
+    <body>
+    <div class="container-fluid">
+        <div class="row">
+        <div class="col-sm-2">
+        {% block sidebar %}
+            <ul class="sidebar-nav">
+            <a href="/docs/">Swagger</a>
+            </ul>
+        {% endblock %}
+        </div>
+        <div class="col-sm-10 ">{% block content %}{% endblock %}</div>
+        </div>
+    </div>
+    <p>Welcome to '1 Group 2 Group 3 Group 4' Epidemic API.</p>
+    <p>Use the above link to view the swagger API implementation.</p>
+</body>
+</html>

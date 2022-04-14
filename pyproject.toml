@@ -14,8 +14,13 @@ robotframework = "^4.1.3"
 bs4 = "^0.0.1"
 requests = "^2.27.1"
 lxml = "^4.8.0"
+<<<<<<< HEAD
 pymongo = "^4.0.2"
 dnspython = "^2.2.1"
+=======
+EB = "^0.1.5"
+pytest-django = "^4.5.2"
+>>>>>>> 1ab9fb824187f01eca498288c469fb87b2ef963f
 
 [tool.poetry.dev-dependencies]
 
