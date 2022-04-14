@@ -274,18 +274,26 @@ for country in country_set:
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, "html.parser")
 
+    new_cases = soup.find("", {"": ""})
+    new_increase = soup.find("", {"": ""})
+    active_cases = soup.find("", {"": ""})
+    active_increase = soup.find("", {"": ""})
 
+    can_you_enter = soup.find_all("", {"": ""})
 
+    # Access the 'what to expect' section
+    expectation_titles = soup.find_all("", {"": ""})
+    for ind, title in enumerate(expectation_titles):
+        splitTitle = re.split('>|<',str(title))
 
 
 
     # Dictionary for expectations section
     what_to_expect = {
-        "vaccine_exemptions": vaccine_exemptions,
-        "forms": forms,
-        "testing_requirements": testing_requirements,
-        "quarantine_requirements": quarantine_requirements,
-        "country_specific_restrictions": country_specific_restrictions
+        "before_your_trip": before_your_trip,
+        "on_arrival": on_arrival,
+        "quarantine_details": quarantine_details,
+        "travel_restrictions": travel_restrictions
     }
 
     # lists the countries under any lane agreements with this country
@@ -297,14 +305,13 @@ for country in country_set:
     }
 
     article = { #making dict of the info.
-        "url": url, # url of this page
         "country": country, # country name
         "new_cases": new_cases, # Number of new cases last 7 days
         "new_increase": new_increase, # The % new increases in past 7 days
         "active_cases": active_cases, 
         "active_increase":active_increase, 
         "can_you_enter": can_you_enter, # text
-        "what_to_expect": what_to_expect, # List of expectations
+        "what_to_expect": what_to_expect, # contains what_to_expect dictionary
         "lanes": lanes,
         "link": link,
     }
