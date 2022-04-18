@@ -52,6 +52,25 @@ class Reports(models.Model):
             'report_id': self.id,
             'parent_id': self.parent_id
         }
-    
-    
-    
+
+class TravelInfo(models.Model):
+    id = models.AutoField(db_column='id', primary_key=True)
+    country = models.CharField(db_column='country',max_length=50, blank=True)
+    new_cases = models.IntegerField(db_column='new_cases', null=True)
+    active_cases = models.IntegerField(db_column='active_cases', null=True)
+    new_percentage = models.DecimalField(db_column='new_percentage', max_digits=2, decimal_places=2)
+    active_percentage = models.DecimalField(db_column='active_percentage', max_digits=2, decimal_places=2)
+    can_you_enter = models.TextField(db_column='can_you_enter',null=True)
+    what_to_expect = models.TextField(db_column='what_to_expect',null=True)
+
+    # Stringfy report
+    def __str__(self):
+        return {
+            'country': self.country,
+            'new_cases': self.new_cases,
+            'active_cases': self.active_cases,
+            'new_percentage': self.new_percentage,
+            'active_percentage': self.active_percentage,
+            'can_you_enter': self.can_you_enter,
+            'what_to_expect': self.what_to_expect
+        }
