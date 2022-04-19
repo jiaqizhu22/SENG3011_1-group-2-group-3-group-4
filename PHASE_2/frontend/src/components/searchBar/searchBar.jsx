@@ -65,6 +65,39 @@ const apiFetch = (end_date, start_date, key_terms, location, setSearching, incre
     });
 }
 
+const travelInfoFetch = (country, setTravelInfo) => {
+    if (country == null)
+    {
+        setTravelInfo(null);
+        return;
+    }
+
+    var url = `http://localhost:8000/travelinfo/?country=${country}`;
+    console.log(url);
+
+    return new Promise((resolve, reject) => {
+        fetch(url)
+        .then((response) => {
+            if (response.status === 400 || response.status === 403) {
+                response.json().then((errorMsg) => {
+                    alert(errorMsg['error']);
+                    reject(errorMsg['error']);
+                });
+            }else if(response.status === 200) {
+                response.json().then(data => {
+                    resolve(data);
+                });
+            } else {
+                reject("Error: " + response.status + " response received!");
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            resolve(null);
+        });
+    });
+}
+
 
 const SearchBar = (props) => {
     const [startDate, setStartDate] = useState(null);     
@@ -122,7 +155,7 @@ const SearchBar = (props) => {
                 <Button
                     disabled={searching}
                     onClick={() => {
-                        var apiRet = apiFetch(endDate, startDate, keyTerms, props.country, setSearching, props.incrementSearches)
+                        var apiRet = apiFetch(endDate, startDate, keyTerms, props.country, setSearching, props.incrementSearches);
 
                         if (apiRet != null) {
                             apiRet.then((data) => {
@@ -130,6 +163,14 @@ const SearchBar = (props) => {
                                     props.setArticles(data.articles);
     
                                 setSearching(false);
+                            });
+                        }
+
+                        var travelInfoRet = travelInfoFetch(props.country, props.setTravelInfo);
+
+                        if (travelInfoRet != null) {
+                            travelInfoRet.then((data) => {
+                                props.setTravelInfo(data);
                             });
                         }
                     }
