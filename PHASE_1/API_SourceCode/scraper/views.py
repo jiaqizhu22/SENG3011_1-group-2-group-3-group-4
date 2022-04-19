@@ -7,6 +7,30 @@ from .models import Articles, Reports, Locations
 from django.utils.timezone import make_aware
 from datetime import datetime
 
+#from django.contrib.auth.models import User
+#from django.contrib.auth import authenticate, login, logout 
+import http.client, urllib.parse
+import json
+
+def getGeoid(country, location):
+    conn = http.client.HTTPConnection('api.positionstack.com')
+    params = urllib.parse.urlencode({
+        'access_key': 'cdb1fec8855543a36e8274d9fcb04232',
+        'query': country + " " + location,
+        'limit': 1
+        })
+
+    conn.request('GET', '/v1/forward?{}'.format(params))
+
+    res = conn.getresponse()
+    data = res.read().decode('utf-8')
+    obj = json.loads(data)
+    lat = obj['data'][0]['latitude']
+    lng = obj['data'][0]['longitude']
+    return {
+        "lat": lat,
+        "lng": lng
+    }
 
 def index(request: HttpRequest):
     """View function for home page of site."""
@@ -147,7 +171,12 @@ def search(request: HttpRequest):
                 if report_string['event_date'] != None:
                     report_info['event_date'] = report_string['event_date'].strftime("%Y-%m-%dT%H-%M-%S")
                 if location_string != {'country': '','location': ''}:
+                    geoID = getGeoid(location_string['country'], location_string['location'])
+                    location_string['lat'] = geoID['lat']
+                    location_string['lng'] = geoID['lng']
                     report_info['locations'].append(location_string)
+                
+                
                 report_list.append(report_info)
         # Only add article to result list if there are matching reports
         if report_list != []:
@@ -158,3 +187,58 @@ def search(request: HttpRequest):
         "articles": results
     })
 
+'''
+def register(request: HttpRequest):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(request.method + " requests not allowed")
+    
+    valid_request = "username" in request.POST and "email" in request.POST and "password" in request.POST
+    
+    if not valid_request:
+        return HttpResponseBadRequest("Invalid input: refer to documentation")
+    
+    username = request.POST.get("username")
+    email = request.POST.get("email")
+    password = request.POST.get("password")
+    
+    valid_request = valid_request and username is not None and email is not None and password is not None
+    
+    if not valid_request:
+        return HttpResponseBadRequest("Invalid input: refer to documentation")
+    
+    user = User.objects.create_user(username, email, password);
+    
+    
+    return JsonResponse(user)
+
+
+def login(request: HttpRequest):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(request.method + " requests not allowed")
+    
+    valid_request = "username" in request.POST and "password" in request.POST
+    
+    if not valid_request:
+        return HttpResponseBadRequest("Invalid input: refer to documentation")
+    
+    username = request.POST.get("username")
+    password = request.POST.get("password")
+    
+    valid_request = valid_request and username is not None and password is not None
+    
+    if not valid_request:
+        return HttpResponseBadRequest("Invalid input: refer to documentation")
+    
+    user = authenticate(request, username=username, password=password)
+    
+    if user is None:
+        return HttpResponseBadRequest("User does not exist")
+    else:
+        login(request, user)
+    
+    return JsonResponse(user)
+    
+    
+def logout(request: HttpRequest):
+    logout(request)
+'''
