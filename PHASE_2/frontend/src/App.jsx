@@ -2,8 +2,8 @@ import './App.css';
 import React, {useState} from 'react';
 import 'react-notifications/lib/notifications.css';
 
-import Header from './components/header/header'
-import Footer from './components/footer/footer'
+import Header from './components/header/header';
+
 import ArticleList from './components/articles/articleList';
 import MapView from './components/map/mapView';
 import SearchBar from './components/searchBar/searchBar';
@@ -65,8 +65,6 @@ function App() {
             NotificationManager.info("Achieved 'Visited 10 articles'!");
         }
     }
-
-
     
     return (
         <div className="App" style={{height: "100%", width: "100%"}}>

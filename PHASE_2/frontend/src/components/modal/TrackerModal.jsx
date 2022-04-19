@@ -12,7 +12,7 @@ const TrackerModal = (props) => {
                 <h2>COVID-19 Tracker</h2>
             </ModalHeader>
             <ModalBody >
-            <iframe src="https://bing.com/covid" style={{width: "100%", height:"500px"}}></iframe>
+            <iframe src="https://bing.com/covid" title="bing-covid-19-tracker" style={{width: "100%", height:"400px"}}></iframe>
             </ModalBody>
         </Modal>
     );

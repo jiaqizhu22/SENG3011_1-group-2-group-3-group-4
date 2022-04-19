@@ -1,4 +1,3 @@
-import './articles.css';
 import React from 'react';
 
 import List from '@mui/material/List';
