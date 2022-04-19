@@ -16,7 +16,7 @@ const TrackerButton = (props) => (
                 <LocalPoliceIcon/>
 
                 <span style={{paddingLeft: "10px"}}>
-                    Tracker
+                    COVID-19 Tracker
                 </span>
         </button>
     </Grid>
