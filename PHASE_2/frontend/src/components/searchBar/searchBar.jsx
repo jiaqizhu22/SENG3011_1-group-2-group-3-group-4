@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { format, subYears } from 'date-fns'
 
-const apiFetch = (end_date, start_date, key_terms, location, setSearching, setNumSearches, numSearches) => { 
+const apiFetch = (end_date, start_date, key_terms, location, setSearching, incrementSearches) => { 
 
     if (location == null || typeof location != "string" || location === "") {
         alert("Country cannot be empty.");
@@ -54,11 +54,11 @@ const apiFetch = (end_date, start_date, key_terms, location, setSearching, setNu
             }
 
             setSearching(false);
-            setNumSearches(numSearches + 1);
+            incrementSearches();
         })
         .catch((err) => {
             setSearching(false);
-            setNumSearches(numSearches + 1);
+            incrementSearches();
             console.log(err)
             resolve(null);
         });
@@ -122,7 +122,7 @@ const SearchBar = (props) => {
                 <Button
                     disabled={searching}
                     onClick={() => {
-                        var apiRet = apiFetch(endDate, startDate, keyTerms, props.country, setSearching, props.setNumSearches, props.numSearches)
+                        var apiRet = apiFetch(endDate, startDate, keyTerms, props.country, setSearching, props.incrementSearches)
 
                         if (apiRet != null) {
                             apiRet.then((data) => {

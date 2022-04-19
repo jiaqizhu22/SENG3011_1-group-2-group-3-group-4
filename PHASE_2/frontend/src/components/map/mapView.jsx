@@ -46,7 +46,7 @@ const MapView = (props) => {
     }
 
     return (
-        <ComposableMap data-tip="" style={{width: "80%"}} projection="geoMercator" projectionConfig={{scale: 100}}>
+        <ComposableMap data-tip="" style={{width: "80%", height: "100%"}} projection="geoMercator" projectionConfig={{scale: 100}}>
             <Geographies geography={geoUrl}>
                 {({ geographies }) =>
                     geographies

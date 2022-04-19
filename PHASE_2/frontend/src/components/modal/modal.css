@@ -19,7 +19,9 @@
 
 .modal__content {
     height: 50%;
-    width: 60%;
+    width: auto;
+    max-width: 80%;
+    min-width: 60%;
     margin: 15% auto;
     background-color: #fff;
     border-radius: 5px;

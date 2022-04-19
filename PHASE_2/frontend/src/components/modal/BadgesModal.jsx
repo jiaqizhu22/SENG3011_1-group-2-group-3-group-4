@@ -6,9 +6,9 @@ import Divider from '@mui/material/Divider';
 import Modal, { ModalBody, ModalFooter, ModalHeader } from './Modal';
 import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 
+import { red, blue, pink, purple, teal, green, grey } from '@mui/material/colors';
+
 const boxStyle = {
-    bgcolor: 'background.paper',
-    borderColor: 'text.primary',
     m: 1,
     border: 1,
     width: '5rem',
@@ -16,88 +16,65 @@ const boxStyle = {
     padding: '10px'
   };
 
+function createBadge(colorFamily, text) {
+    return (
+        <Grid item xs={2} sx={{padding: "10px"}}>
+            <Box sx={{ ...boxStyle, borderRadius: 4, borderColor: colorFamily[500], bgcolor: colorFamily[100], color: colorFamily[700] }}>
+                <LocalPoliceIcon sx={{color: colorFamily[700]}}/>
+                <Divider/>
+                {text}
+            </Box>
+        </Grid>
+    );
+}
+
 function createBadges(numSearches, numArticleClicks) {
     var badges = []
+    var colorFamily;
+
+    // Disabled
+    colorFamily = grey;
 
     if (numSearches > 0) {
-        badges.push(
-            <Grid item xs={2} sx={{padding: "10px"}}>
-                <Box sx={{ ...boxStyle, borderRadius: 4 }}>
-                    <LocalPoliceIcon/>
-                    <Divider/>
-                    Searched once
-                </Box>
-            </Grid>
-        )
+        colorFamily = red;
     }
+
+    badges.push(createBadge(colorFamily, "Searched once"));
+    colorFamily = grey;
 
     if (numSearches >= 5) {
-        badges.push(
-            <Grid item xs={2}>
-                <Box sx={{ ...boxStyle, borderRadius: 4 }}>
-                    <LocalPoliceIcon/>
-                    <Divider/>
-                    Searched 5 Times
-                </Box>
-            </Grid>
-        )
+        colorFamily = blue;
     }
+
+    badges.push(createBadge(colorFamily, "Searched 5 Times"));
+    colorFamily = grey;
 
     if (numSearches >= 10) {
-        badges.push(
-            <Grid item xs={2}>
-                <Box sx={{ ...boxStyle, borderRadius: 4 }}>
-                    <LocalPoliceIcon/>
-                    <Divider/>
-                    Searched 10 Times
-                </Box>
-            </Grid>
-        )
+        colorFamily = pink;
     }
+
+    badges.push(createBadge(colorFamily, "Searched 10 Times"));
+    colorFamily = grey;
 
     if (numArticleClicks > 0) {
-        badges.push(
-            <Grid item xs={2} sx={{padding: "10px"}}>
-                <Box sx={{ ...boxStyle, borderRadius: 4 }}>
-                    <LocalPoliceIcon/>
-                    <Divider/>
-                    Visited one article
-                </Box>
-            </Grid>
-        )
+        colorFamily = purple;
     }
+
+    badges.push(createBadge(colorFamily, "Visited one article"));
+    colorFamily = grey;
 
     if (numArticleClicks >= 5) {
-        badges.push(
-            <Grid item xs={2}>
-                <Box sx={{ ...boxStyle, borderRadius: 4 }}>
-                    <LocalPoliceIcon/>
-                    <Divider/>
-                    Visited 5 articles
-                </Box>
-            </Grid>
-        )
+        colorFamily = teal;
     }
+
+    badges.push(createBadge(colorFamily, "Visited 5 articles"));
+    colorFamily = grey;
 
     if (numArticleClicks >= 10) {
-        badges.push(
-            <Grid item xs={2}>
-                <Box sx={{ ...boxStyle, borderRadius: 4 }}>
-                    <LocalPoliceIcon/>
-                    <Divider/>
-                    Visited 10 articles
-                </Box>
-            </Grid>
-        )
+        colorFamily = green;
     }
 
-    if (badges.length <= 0) {
-        badges.push(
-            <Grid item xs={12}>
-                You have no badges yet.
-            </Grid>
-        )
-    }
+    badges.push(createBadge(colorFamily, "Visited 10 articles"));
 
     return badges;
 }

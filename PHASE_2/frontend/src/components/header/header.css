@@ -12,7 +12,9 @@
 }
 
 .photo {
-    height: 60px;
-    width: 60px;
-    padding-right: 50px;
+    height: auto;
+    width: auto;
+    max-height: 100%;
+    padding-right: 1%;
+    object-fit: contain;
   }
