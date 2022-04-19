@@ -30,13 +30,13 @@ function App() {
         setNumSearches(newNumSearches);
 
         // Should probably move to its own place
-        if (newNumSearches == 1) {
+        if (newNumSearches === 1) {
             NotificationManager.info("Achieved 'Searched once'!");
         }
-        else if (newNumSearches == 5) {
+        else if (newNumSearches === 5) {
             NotificationManager.info("Achieved 'Searched 5 Times'!");
         }
-        else if (newNumSearches == 10) {
+        else if (newNumSearches === 10) {
             NotificationManager.info("Achieved 'Searched 10 Times'!");
         }
 
@@ -47,15 +47,15 @@ function App() {
         var newNumArticleClicks = numArticleClicks + 1;
         setNumArticleClicks(newNumArticleClicks);
 
-        if (newNumArticleClicks == 1) {
+        if (newNumArticleClicks === 1) {
             NotificationManager.info("Achieved 'Visited one article'!");
         }
     
-        if (newNumArticleClicks == 5) {
+        if (newNumArticleClicks === 5) {
             NotificationManager.info("Achieved 'Visited 5 articles'!");
         }
     
-        if (newNumArticleClicks == 10) {
+        if (newNumArticleClicks === 10) {
             NotificationManager.info("Achieved 'Visited 10 articles'!");
         }
     }
