@@ -3,7 +3,7 @@ import React from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import Modal, { ModalBody, ModalFooter, ModalHeader } from './Modal';
+import Modal, { ModalBody, ModalHeader } from './Modal';
 import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 
 import { red, blue, pink, purple, teal, green, grey } from '@mui/material/colors';
