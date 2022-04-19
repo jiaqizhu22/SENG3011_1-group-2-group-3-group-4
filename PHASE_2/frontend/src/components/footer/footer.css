@@ -1,0 +1,27 @@
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 5px;
+  background: #ffffff;
+  text-align: left;
+  font-weight: bold;
+  font-size: 20px;
+  color: #282C34;
+  position: sticky;
+  bottom: 0%;
+}
+
+.badgesButton {
+  background-color: #6A6869;
+  color: white;
+  font-size: 20px;
+  padding: 10px 50px;
+  border-radius: 5px;
+  margin: 5px 0px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
