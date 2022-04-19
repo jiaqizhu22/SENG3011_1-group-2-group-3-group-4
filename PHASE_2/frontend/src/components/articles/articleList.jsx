@@ -44,7 +44,7 @@ function ArticleList(props) {
     
 
     return (
-        <List sx={{ width: '20%', maxWidth: 360, height: "100%", maxHeight: 1.0, overflow: 'auto', bgcolor: 'background.paper' }}>
+        <List sx={{ width: '20%', maxWidth: 360, height: "98%", maxHeight: 1.0, overflow: 'auto', bgcolor: 'background.paper' }}>
             {articleEntries}
         </List>
     );

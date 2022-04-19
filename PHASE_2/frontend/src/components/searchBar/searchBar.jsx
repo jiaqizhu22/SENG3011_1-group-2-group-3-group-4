@@ -65,6 +65,13 @@ const apiFetch = (end_date, start_date, key_terms, location, setSearching, incre
     });
 }
 
+function normaliseCountry(str) {
+    if (str === "United States of America")
+        return "united-states"; // Special case
+
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(" ", "-");
+}
+
 const travelInfoFetch = (country, setTravelInfo) => {
     if (country == null)
     {
@@ -72,7 +79,9 @@ const travelInfoFetch = (country, setTravelInfo) => {
         return;
     }
 
-    var url = `http://localhost:8000/travelinfo/?country=${country}`;
+    var searchTerm = normaliseCountry(country);
+
+    var url = `http://localhost:8000/travelinfo/?country=${searchTerm}`;
     console.log(url);
 
     return new Promise((resolve, reject) => {
