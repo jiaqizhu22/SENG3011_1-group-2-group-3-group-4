@@ -8,7 +8,7 @@
 # 3. create a schema containing these attributes (keys), the table/model 
     # can be called travel or travel_info (leave it until scraping is done)
 
-country_set = {
+country_set = [
     "algeria", # START OF AFRICA
     "angola",
     "benin",
@@ -257,7 +257,7 @@ country_set = {
     "singapore",
     "thailand",
     "vietnam"
-}
+]
 
 tempSet = ["australia","chambodia","india","malaysia","jumbotown","thailand"] # testing
 
@@ -270,15 +270,21 @@ from time import strptime
 import calendar
 
 countries_list = []
+counter = 0
 for country in country_set:
+    counter = counter + 1
+    print(counter)
+    print(country)
     URL = "https://trutrip.co/country/"+country
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, "html.parser")
 
     errorCheck = len(soup.find_all("div", {"class": "result-error-message"}))
     if errorCheck != 0:
+        print("skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped skipped ")
         pass
     else:
+        print("done")
 
         cases_scrape = soup.find_all("div", {"class": "h5 font-weight-bold"})
         casesIncrease_scrape = soup.find_all("span", {"class": "align-middle"})
