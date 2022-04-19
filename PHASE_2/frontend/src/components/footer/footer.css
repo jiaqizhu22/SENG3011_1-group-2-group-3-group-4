@@ -1,7 +1,6 @@
 .footer {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   padding: 5px;
   background: #ffffff;
   text-align: left;
@@ -18,10 +17,10 @@
   font-size: 20px;
   padding: 10px 50px;
   border-radius: 5px;
-  margin: 5px 0px;
+  margin: 5px 10px;
   cursor: pointer;
 
   display: flex;
-  align-items: center;
-  justify-content: center;
+  direction: row;
+  align-content: flex-start;
 }

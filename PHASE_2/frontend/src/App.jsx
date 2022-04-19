@@ -2,12 +2,15 @@ import './App.css';
 import React, {useState} from 'react';
 import 'react-notifications/lib/notifications.css';
 
-import Header from './components/header/header'
-import Footer from './components/footer/footer'
+import Header from './components/header/header';
+import Footer from './components/footer/footer';
 import ArticleList from './components/articles/articleList';
 import MapView from './components/map/mapView';
-import SearchBar from './components/searchBar/searchBar'
-import BadgesModal from './components/modal/BadgesModal'
+import SearchBar from './components/searchBar/searchBar';
+import BadgesModal from './components/modal/BadgesModal';
+import TrackerModal from './components/modal/TrackerModal';
+import TrackerButton from './components/footer/trakerButton';
+import BadgesButton from './components/footer/badgeButton';
 
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -24,6 +27,7 @@ function App() {
     const [badgesOpen, setBadgesOpen] = useState(false);
     const [numSearches, setNumSearches] = useState(0);
     const [numArticleClicks, setNumArticleClicks] = useState(0);
+    const [trackerOpen, setTrackerOpen] = useState(false);
 
     function incrementSearches() {
         var newNumSearches = numSearches + 1;
@@ -68,9 +72,12 @@ function App() {
                 <header style={{width: "100%", display: "flex", height: "7%"}}>
                     <Header/>
                 </header>
-
+                
                 <main style={{height: "85%"}}>
                     <BadgesModal badgesOpen={badgesOpen} setBadgesOpen={setBadgesOpen} numSearches={numSearches} numArticleClicks={numArticleClicks}/>
+
+                    <TrackerModal trackerOpen={trackerOpen} setTrackerOpen={setTrackerOpen}/>
+
                     <SearchBar setArticles={setArticles} setCountry={setCountry} country={countryClicked} incrementSearches={incrementSearches}/>
                     
                     <Stack direction="row" justifyContent="end" alignItems="flex-start" sx={{height: "90%", flexGrow: "1", flexShrink: "1", flexBasis: "auto"}}>
@@ -80,11 +87,11 @@ function App() {
                     </Stack>
                     <ReactTooltip>{hoveringCountry}</ReactTooltip>
                 </main>
-
+                
                 <NotificationContainer/>
-
-                <footer style={{width: "100%", height: "7%"}}>
-                    <Footer openBadges={setBadgesOpen}/>
+                <footer className="footer" style={{height: "8%",  paddingRight: "6px"}}>
+                    <BadgesButton openBadges={setBadgesOpen}/>
+                    <TrackerButton openTracker={setTrackerOpen}/>
                 </footer>
             </LocalizationProvider>
 
