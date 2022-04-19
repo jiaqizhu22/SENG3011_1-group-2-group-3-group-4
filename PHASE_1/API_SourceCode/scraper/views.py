@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
 
 #from .scraper import web_scraper
-from .models import Articles, Reports, Locations
+from .models import *
 from django.utils.timezone import make_aware
 from datetime import datetime
 
@@ -187,58 +187,61 @@ def search(request: HttpRequest):
         "articles": results
     })
 
-'''
-def register(request: HttpRequest):
-    if request.method != "POST":
+def travelinfo(request: HttpRequest):
+    """Search function for travel info database"""
+    
+    if request.method != "GET":
         return HttpResponseNotAllowed(request.method + " requests not allowed")
     
-    valid_request = "username" in request.POST and "email" in request.POST and "password" in request.POST
+    valid_request = "country" in request.GET
     
     if not valid_request:
         return HttpResponseBadRequest("Invalid input: refer to documentation")
     
-    username = request.POST.get("username")
-    email = request.POST.get("email")
-    password = request.POST.get("password")
+    country = request.GET.get("country")
     
-    valid_request = valid_request and username is not None and email is not None and password is not None
+    travelInfos = TravelInfo.objects.filter(country__iexact=country)
+    if (len(travelInfos) < 1):
+        return JsonResponse({}) # Empty response
     
-    if not valid_request:
-        return HttpResponseBadRequest("Invalid input: refer to documentation")
+    travelInfo: TravelInfo = travelInfos[0]
+    travelInfoDict = {
+        'country': travelInfo.country,
+        'overview': {},
+        'new_cases': travelInfo.new_cases,
+        'new_percentage': travelInfo.new_percentage,
+        'active_cases': travelInfo.active_cases,
+        'active_percentage': travelInfo.active_percentage,
+        'can_you_enter': travelInfo.can_you_enter,
+        'what_to_expect': {}
+    }
     
-    user = User.objects.create_user(username, email, password);
+    overviewId = travelInfo.overview.id
+    overviews = Overview.objects.filter(id=overviewId)
+    if (len(overviews) > 0):
+        overview: Overview = overviews[0]
+        
+        overviewDict = {
+            'open_status': overview.open_status,
+            'quarantine_days': overview.quarantine_days
+        }
+        
+        travelInfoDict['overview'] = overviewDict
+        
     
+    wteId = travelInfo.what_to_expect.id
+    wtes = WhatToExpect.objects.filter(id=wteId)
+    if (len(wtes) > 0):
+        wte: WhatToExpect = wtes[0]
+        
+        wteDict = {
+            'before_your_trip': wte.before_your_trip,
+            'on_arrival': wte.on_arrival,
+            'quarantine_details': wte.quarantine_details,
+            'travel_restrictions': wte.travel_restrictions
+        }
+        
+        travelInfoDict['what_to_expect'] = wteDict
+        
+    return JsonResponse(travelInfoDict)
     
-    return JsonResponse(user)
-
-
-def login(request: HttpRequest):
-    if request.method != "POST":
-        return HttpResponseNotAllowed(request.method + " requests not allowed")
-    
-    valid_request = "username" in request.POST and "password" in request.POST
-    
-    if not valid_request:
-        return HttpResponseBadRequest("Invalid input: refer to documentation")
-    
-    username = request.POST.get("username")
-    password = request.POST.get("password")
-    
-    valid_request = valid_request and username is not None and password is not None
-    
-    if not valid_request:
-        return HttpResponseBadRequest("Invalid input: refer to documentation")
-    
-    user = authenticate(request, username=username, password=password)
-    
-    if user is None:
-        return HttpResponseBadRequest("User does not exist")
-    else:
-        login(request, user)
-    
-    return JsonResponse(user)
-    
-    
-def logout(request: HttpRequest):
-    logout(request)
-'''
