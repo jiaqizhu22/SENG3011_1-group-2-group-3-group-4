@@ -1,4 +1,3 @@
-import './articles.css';
 import React from 'react';
 
 import List from '@mui/material/List';
@@ -9,11 +8,11 @@ import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import Divider from '@mui/material/Divider';
 import { format } from 'date-fns'
 
-function renderArticleEntry(url, date, headline, numArticleClicks, setNumArticleClicks) {
+function renderArticleEntry(url, date, headline, incrementArticleClicks) {
     return (
         <ListItem button component="a" href={url} target="_blank" rel="noopener noreferrer"
             onClick={() => {
-                setNumArticleClicks(numArticleClicks + 1);
+                incrementArticleClicks();
             }}
         >
             <ListItemIcon>
@@ -37,14 +36,14 @@ function ArticleList(props) {
         var date = format(new Date(obj.article.date_of_publication), "yyyy-MM-dd");
         var headline = obj.article.headline;
 
-        articleEntries.push(renderArticleEntry(url, date, headline, props.numArticleClicks, props.setNumArticleClicks));
+        articleEntries.push(renderArticleEntry(url, date, headline, props.incrementArticleClicks));
         articleEntries.push(<Divider />);
     }
 
     
 
     return (
-        <List sx={{ width: '20%', maxWidth: 360, height: "100%", maxHeight: 1.0, overflow: 'auto', bgcolor: 'background.paper' }}>
+        <List sx={{ width: '20%', maxWidth: 360, height: "98%", maxHeight: 1.0, overflow: 'auto', bgcolor: 'background.paper' }}>
             {articleEntries}
         </List>
     );

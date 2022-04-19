@@ -9,15 +9,15 @@ import {
 
 const geoUrl = "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
 
-function createMarkerCoords(reports) {
+function createMarkerCoords(article) {
     var markers = [];
 
-    for (var obj of reports) {
+    for (var obj of article.reports) {
         for (var loc of obj.locations) {
             var lat = loc.lat;
             var lng = loc.lng;
             
-            markers.push({coordinates: [parseFloat(lng), parseFloat(lat)]});
+            markers.push({coordinates: [parseFloat(lng), parseFloat(lat)], url: article.url, headline: article.headline});
         }
     }
 
@@ -42,11 +42,11 @@ const MapView = (props) => {
         var obj = props.articles[i];
 
         // Create marker list
-        markers = markers.concat(createMarkerCoords(obj.article.reports));
+        markers = markers.concat(createMarkerCoords(obj.article));
     }
 
     return (
-        <ComposableMap data-tip="" style={{width: "80%"}} projection="geoMercator" projectionConfig={{scale: 100}}>
+        <ComposableMap data-tip="" style={{width: "80%", height: "100%"}} projection="geoMercator" projectionConfig={{scale: 100}}>
             <Geographies geography={geoUrl}>
                 {({ geographies }) =>
                     geographies
@@ -85,10 +85,20 @@ const MapView = (props) => {
                 }
                 </Geographies>
 
-                {markers.map(({ coordinates }) => (
-                    <Marker coordinates={coordinates} style={{pointerEvents: "none"}}>
-                        <circle r={10} fill="#F00" stroke="#fff" strokeWidth={2} />
-                    </Marker>
+                {markers.map(({ coordinates, url, headline }) => (
+                    <a href={url} target="_blank" rel="noopener noreferrer">
+                        <Marker coordinates={coordinates} style={{pointerEvents: "none"}}
+                        onMouseEnter={() => {
+                            props.setHovering(headline);
+                        }}
+                        onMouseLeave={() => {
+                            props.setHovering("");
+                        }}
+                        
+                        >
+                            <circle r={10} fill="#F00" stroke="#fff" strokeWidth={2} />
+                        </Marker>
+                    </a>
                 ))}
 
         </ComposableMap>

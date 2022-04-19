@@ -1,0 +1,36 @@
+.travelInfo {
+    padding-top: 5%;
+    padding-left: 10px;
+    text-align: left;
+    background: #6A6869;
+    color: #cccccc;
+    z-index: 500;
+}
+
+.infoTitle {
+    font-weight: bold;
+    font-size: 32px;
+    color: #ffffff;
+}
+
+.infoSubTitle {
+    font-weight: bold;
+    font-size: 26px;
+    color: #eeeeee;
+}
+
+.infoSubSubTitle {
+    font-weight: bold;
+    font-size: 23px;
+    color: #dddddd;
+}
+
+b {
+    color: #ffffff;
+}
+
+.overviewInfo {
+    background: #4a494a;
+    border-radius: 30px;
+    padding: "10px"
+}

@@ -140,6 +140,54 @@
           }
         }
       }
+    },
+    "/travelinfo": {
+      "get": {
+        "tags": [
+          "Travel Info"
+        ],
+        "summary": "Search for travel info",
+        "description": "This allows user to search for travel information matching the country given.",
+        "operationId": "getTravelInfo",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "country",
+            "description": "Country being queried",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TravelInfoResult"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error400"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/Error405"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error500"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -201,6 +249,75 @@
               }
             }
           }
+        }
+      }
+    },
+    "TravelInfoResult": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "string"
+        },
+        "overview": {
+          "type": "object",
+          "properties": {
+            "open_status": {
+              "type": "string"
+            },
+            "quarantine_days": {
+              "type": "string"
+            }
+          }
+        },
+        "new_cases": {
+          "type": "string"
+        },
+        "new_percentage": {
+          "type": "string"
+        },
+        "active_cases": {
+          "type": "string"
+        },
+        "active_percentage": {
+          "type": "string"
+        },
+        "can_you_enter": {
+          "type": "string"
+        },
+        "what_to_expect": {
+          "type": "object",
+          "properties": {
+            "before_your_trip": {
+              "type": "string"
+            },
+            "on_arrival": {
+              "type": "string"
+            },
+            "quarantine_details": {
+              "type": "string"
+            },
+            "travel_restrictions": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "example": {
+        "country": "Algeria",
+        "overview": {
+          "open_status": "Partially Open",
+          "quarantine_days": "Up to 14 Days"
+        },
+        "new_cases": "12",
+        "new_percentage": "-66.67% (last 7 days)",
+        "active_cases": "53,911",
+        "active_percentage": "7.67% (last 7 days)",
+        "can_you_enter": "Entry is restricted to ...",
+        "what_to_expect": {
+          "before_your_trip": "You must obtain advance ...",
+          "on_arrival": "On arrival you will be required to ...",
+          "quarantine_details": "There is no current quarantine requirement.",
+          "travel_restrictions": "There are no routes that have greater restrictions at this time."
         }
       }
     },

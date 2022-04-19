@@ -16,9 +16,12 @@ html, body{
   height: 100%; 
   width: 100%; 
   margin: 0; 
-  overflow: hidden;
 }
 
+header, footer{
+  position: sticky;
+  z-index: 30;
+}
 
 #root {
   height: 100%; 

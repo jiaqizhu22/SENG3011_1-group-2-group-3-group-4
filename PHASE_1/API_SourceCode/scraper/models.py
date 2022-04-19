@@ -54,6 +54,8 @@ class Reports(models.Model):
         }
 
 class WhatToExpect(models.Model):
+    id = models.AutoField(db_column='id', primary_key=True)
+    travel_id = models.ForeignKey('TravelInfo', related_name="+", on_delete=models.CASCADE, null=True)
     before_your_trip = models.TextField(db_column='before_your_trip',null=True)
     on_arrival = models.TextField(db_column='on_arrival',null=True)
     quarantine_details = models.TextField(db_column='quarantine_details',null=True)
@@ -69,6 +71,8 @@ class WhatToExpect(models.Model):
         }
 
 class Lanes(models.Model):
+    id = models.AutoField(db_column='id', primary_key=True)
+    travel_id = models.ForeignKey('TravelInfo', related_name="+", on_delete=models.CASCADE, null=True)
     green = models.TextField(db_column='green',null=True)
     yellow = models.TextField(db_column='yellow',null=True)
     red = models.TextField(db_column='red',null=True)
@@ -80,17 +84,24 @@ class Lanes(models.Model):
             'yellow': self.yellow,
             'red': self.red
         }
+        
+class Overview(models.Model):
+    id = models.AutoField(db_column='id', primary_key=True)
+    travel_id = models.ForeignKey('TravelInfo', related_name="+", on_delete=models.CASCADE, null=True)
+    open_status = models.TextField(db_column='open_status', null=True)
+    quarantine_days = models.TextField(db_column='quarantine_days', null=True)
 
 class TravelInfo(models.Model):
     id = models.AutoField(db_column='id', primary_key=True)
     country = models.CharField(db_column='country',max_length=50, blank=True)
-    new_cases = models.IntegerField(db_column='new_cases', null=True)
-    active_cases = models.IntegerField(db_column='active_cases', null=True)
-    new_percentage = models.DecimalField(db_column='new_percentage', max_digits=2, decimal_places=2)
-    active_percentage = models.DecimalField(db_column='active_percentage', max_digits=2, decimal_places=2)
+    new_cases = models.CharField(db_column='new_cases', max_length=50, null=True)
+    active_cases = models.CharField(db_column='active_cases', max_length=50, null=True)
+    new_percentage = models.CharField(db_column='new_percentage', max_length=50, null=True)
+    active_percentage = models.CharField(db_column='active_percentage', max_length=50, null=True)
     can_you_enter = models.TextField(db_column='can_you_enter',null=True)
     what_to_expect = models.ForeignKey(WhatToExpect, on_delete=models.CASCADE, null=True)
     lanes = models.ForeignKey(Lanes, on_delete=models.CASCADE, null=True)
+    overview = models.ForeignKey(Overview, on_delete=models.CASCADE, null=True)
 
     # Stringfy report
     def __str__(self):

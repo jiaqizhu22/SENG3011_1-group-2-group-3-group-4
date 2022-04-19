@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { format, subYears } from 'date-fns'
 
-const apiFetch = (end_date, start_date, key_terms, location, setSearching, setNumSearches, numSearches) => { 
+const apiFetch = (end_date, start_date, key_terms, location, setSearching, incrementSearches) => { 
 
     if (location == null || typeof location != "string" || location === "") {
         alert("Country cannot be empty.");
@@ -54,11 +54,53 @@ const apiFetch = (end_date, start_date, key_terms, location, setSearching, setNu
             }
 
             setSearching(false);
-            setNumSearches(numSearches + 1);
+            incrementSearches();
         })
         .catch((err) => {
             setSearching(false);
-            setNumSearches(numSearches + 1);
+            incrementSearches();
+            console.log(err)
+            resolve(null);
+        });
+    });
+}
+
+function normaliseCountry(str) {
+    if (str === "United States of America")
+        return "united-states"; // Special case
+
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(" ", "-");
+}
+
+const travelInfoFetch = (country, setTravelInfo) => {
+    if (country == null)
+    {
+        setTravelInfo(null);
+        return;
+    }
+
+    var searchTerm = normaliseCountry(country);
+
+    var url = `http://epidemicscraper-env.eba-t2stx6uv.us-east-1.elasticbeanstalk.com/travelinfo/?country=${searchTerm}`;
+    console.log(url);
+
+    return new Promise((resolve, reject) => {
+        fetch(url)
+        .then((response) => {
+            if (response.status === 400 || response.status === 403) {
+                response.json().then((errorMsg) => {
+                    alert(errorMsg['error']);
+                    reject(errorMsg['error']);
+                });
+            }else if(response.status === 200) {
+                response.json().then(data => {
+                    resolve(data);
+                });
+            } else {
+                reject("Error: " + response.status + " response received!");
+            }
+        })
+        .catch((err) => {
             console.log(err)
             resolve(null);
         });
@@ -122,7 +164,7 @@ const SearchBar = (props) => {
                 <Button
                     disabled={searching}
                     onClick={() => {
-                        var apiRet = apiFetch(endDate, startDate, keyTerms, props.country, setSearching, props.setNumSearches, props.numSearches)
+                        var apiRet = apiFetch(endDate, startDate, keyTerms, props.country, setSearching, props.incrementSearches);
 
                         if (apiRet != null) {
                             apiRet.then((data) => {
@@ -130,6 +172,14 @@ const SearchBar = (props) => {
                                     props.setArticles(data.articles);
     
                                 setSearching(false);
+                            });
+                        }
+
+                        var travelInfoRet = travelInfoFetch(props.country, props.setTravelInfo);
+
+                        if (travelInfoRet != null) {
+                            travelInfoRet.then((data) => {
+                                props.setTravelInfo(data);
                             });
                         }
                     }
