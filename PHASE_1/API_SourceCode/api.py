@@ -3,6 +3,7 @@
 # endpoint for fetching at every request.
 
 # Settings: required module for TIMEZONE
+from imghdr import what
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 
@@ -10,7 +11,7 @@ import django
 django.setup()
 
 import json
-from scraper.models import Articles, Locations, Reports
+from scraper.models import *
 from django.utils.dateparse import parse_datetime
 from django.conf import settings
 from django.utils.timezone import make_aware
@@ -97,6 +98,66 @@ if __name__ == '__main__':
                     # We need to add an exception:
                     # except MultipleObjectsReturned:
                          
+    with open('./scraper/trudata.json', 'r') as json_file:
+        # Store the json data as a list
+        data = json.load(json_file)
+        
+        for travelInfo in data:
+            
+            # Create travel info
+            try:
+                travelInfoObj = TravelInfo.objects.get(country = travelInfo['country'])
+            except ObjectDoesNotExist:
+                travelInfoObj = TravelInfo.objects.create(
+                    country = travelInfo['country'],
+                    new_cases = travelInfo['new_cases'],
+                    active_cases = travelInfo['active_cases'],
+                    new_percentage = travelInfo['new_increase'],
+                    active_percentage = travelInfo['active_increase'],
+                    can_you_enter = travelInfo['can_you_enter']
+                )
+                
+            # Create overview
+            overview = travelInfo['overview']
+            try:
+                overviewObj = Overview.objects.get(travel_id = travelInfoObj)
+                overviewObj.open_status = overview['open_status']
+                overviewObj.quarantine_days = overview['quarentine_days']
+                overviewObj.save()
+            except ObjectDoesNotExist:
+                overviewObj = Overview.objects.create(
+                    travel_id = travelInfoObj,
+                    open_status = overview['open_status'],
+                    quarantine_days = overview['quarentine_days']
+                )
+                
+            travelInfoObj.overview = overviewObj
+            travelInfoObj.save()
+                
+            # Create what to expect
+            wte = travelInfo['what_to_expect']
+            try:
+                wteObj = WhatToExpect.objects.get(travel_id = travelInfoObj)
+                wteObj.before_your_trip = wte['before_your_trip']
+                wteObj.on_arrival = wte['on_arrival']
+                wteObj.quarantine_details = wte['quarantine_details']
+                wteObj.travel_restrictions = wte['travel_restrictions']
+                wteObj.save()
+            except ObjectDoesNotExist:
+                wteObj = WhatToExpect.objects.create(
+                    travel_id = travelInfoObj,
+                    before_your_trip = wte['before_your_trip'],
+                    on_arrival = wte['on_arrival'],
+                    quarantine_details = wte['quarantine_details'],
+                    travel_restrictions = wte['travel_restrictions']
+                )
+                
+            travelInfoObj.what_to_expect = wteObj
+            travelInfoObj.save()
+            
+            # No lanes in scraper as of right now
+                
+            
     print('COMPLETE LOADING DATA')
             
             
