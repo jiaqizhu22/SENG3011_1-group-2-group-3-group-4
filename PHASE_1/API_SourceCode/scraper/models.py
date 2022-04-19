@@ -53,6 +53,34 @@ class Reports(models.Model):
             'parent_id': self.parent_id
         }
 
+class WhatToExpect(models.Model):
+    before_your_trip = models.TextField(db_column='before_your_trip',null=True)
+    on_arrival = models.TextField(db_column='on_arrival',null=True)
+    quarantine_details = models.TextField(db_column='quarantine_details',null=True)
+    travel_restrictions = models.TextField(db_column='travel_restrictions',null=True)
+
+    # Stringfy report
+    def __str__(self):
+        return {
+            'before_your_trip': self.before_your_trip,
+            'on_arrival': self.on_arrival,
+            'quarantine_details': self.quarantine_details,
+            'travel_restrictions': self.travel_restrictions
+        }
+
+class Lanes(models.Model):
+    green = models.TextField(db_column='green',null=True)
+    yellow = models.TextField(db_column='yellow',null=True)
+    red = models.TextField(db_column='red',null=True)
+
+    # Stringfy report
+    def __str__(self):
+        return {
+            'green': self.green,
+            'yellow': self.yellow,
+            'red': self.red
+        }
+
 class TravelInfo(models.Model):
     id = models.AutoField(db_column='id', primary_key=True)
     country = models.CharField(db_column='country',max_length=50, blank=True)
@@ -61,7 +89,8 @@ class TravelInfo(models.Model):
     new_percentage = models.DecimalField(db_column='new_percentage', max_digits=2, decimal_places=2)
     active_percentage = models.DecimalField(db_column='active_percentage', max_digits=2, decimal_places=2)
     can_you_enter = models.TextField(db_column='can_you_enter',null=True)
-    what_to_expect = models.TextField(db_column='what_to_expect',null=True)
+    what_to_expect = models.ForeignKey(WhatToExpect, on_delete=models.CASCADE, null=True)
+    lanes = models.ForeignKey(Lanes, on_delete=models.CASCADE, null=True)
 
     # Stringfy report
     def __str__(self):
