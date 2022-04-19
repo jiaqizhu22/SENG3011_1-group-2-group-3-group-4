@@ -8,10 +8,9 @@ import ArticleList from './components/articles/articleList';
 import MapView from './components/map/mapView';
 import SearchBar from './components/searchBar/searchBar';
 import BadgesModal from './components/modal/BadgesModal';
-import TravelInfo from './components/travelinfo/travelInfo';
 import TrackerModal from './components/modal/TrackerModal';
+import TravelInfo from './components/travelinfo/travelInfo';
 import TrackerButton from './components/footer/trakerButton';
-import BadgesButton from './components/footer/badgeButton';
 
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -78,6 +77,7 @@ function App() {
                 
                 <main style={{height: "85%", marginTop: "7%"}}>
                         <BadgesModal badgesOpen={badgesOpen} setBadgesOpen={setBadgesOpen} numSearches={numSearches} numArticleClicks={numArticleClicks}/>
+                        <TrackerModal trackerOpen={trackerOpen} setTrackerOpen={setTrackerOpen}/>
                         <SearchBar setArticles={setArticles} setCountry={setCountry} country={countryClicked} incrementSearches={incrementSearches} setTravelInfo={setTravelInfo}/>
                         
                         <Stack direction="row" justifyContent="end" alignItems="flex-start" sx={{height: "90%", flexGrow: "1", flexShrink: "1", flexBasis: "auto"}}>
