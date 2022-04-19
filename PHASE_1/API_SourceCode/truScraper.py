@@ -259,6 +259,8 @@ country_set = {
     "vietnam"
 }
 
+tempSet = ["australia","chambodia","india","malaysia","jumbotown","thailand"] # testing
+
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -269,56 +271,67 @@ import calendar
 
 countries_list = []
 for country in country_set:
-    counter = 0
     URL = "https://trutrip.co/country/"+country
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, "html.parser")
 
-    new_cases = soup.find("", {"": ""})
-    new_increase = soup.find("", {"": ""})
-    active_cases = soup.find("", {"": ""})
-    active_increase = soup.find("", {"": ""})
+    errorCheck = len(soup.find_all("div", {"class": "result-error-message"}))
+    if errorCheck != 0:
+        pass
+    else:
 
-    can_you_enter = soup.find_all("", {"": ""})
+        cases_scrape = soup.find_all("div", {"class": "h5 font-weight-bold"})
+        casesIncrease_scrape = soup.find_all("span", {"class": "align-middle"})
+        new_cases = re.split('<|>',str(cases_scrape[1]))[2]
+        new_increase = re.split('<|>',str(casesIncrease_scrape[0]))[2]
+        active_cases = re.split('<|>',str(cases_scrape[2]))[2]
+        active_increase = re.split('<|>',str(casesIncrease_scrape[1]))[2]
+        can_you_enter = ' '.join(soup.find("div", {"class": "mb-5"}).stripped_strings).split("Can you enter? ")[1]
 
-    # Access the 'what to expect' section
-    expectation_titles = soup.find_all("", {"": ""})
-    for ind, title in enumerate(expectation_titles):
-        splitTitle = re.split('>|<',str(title))
+        # Access the 'what to expect' section
+        expectation_titles = soup.find_all("p", {"class": "font-weight-bold mb-0"})
+        for ind, title in enumerate(expectation_titles):
+            splitTitle = re.split('>|<',str(title))[2]
+        bodyText = ' '.join(soup.find("div", {"class": "col-12 col-md-10 col-lg-9"}).stripped_strings)
+        bodyText = re.split('Can you enter? |📝 Before your trip |🛬 On Arrival |😷 Quarantine details |🛂 Travel restrictions',bodyText)
+        before_your_trip = bodyText[1]
+        on_arrival = bodyText[2]
+        quarantine_details = bodyText[3]
+        travel_restrictions = bodyText[4]
+        # Dictionary for expectations section
+        what_to_expect = {
+            "before_your_trip": before_your_trip,
+            "on_arrival": on_arrival,
+            "quarantine_details": quarantine_details,
+            "travel_restrictions": travel_restrictions
+        }
 
+        # lists the countries under any lane agreements with this country
+        # null if no countries under this lane at this time
+        greenLanes = ','.join(soup.find("div", {"class": "text-body2"}).stripped_strings).split(",")
+        overviewData = ', '.join(soup.find("ul", {"class": "list-type-custom text-body2 mb-3"}).stripped_strings).split(", ")
+        openStatus = overviewData[0]
+        quarentineDays = overviewData[1]
+        overview = {
+        "open_status": openStatus,
+        "quarentine_days": quarentineDays,
+        }
 
-
-    # Dictionary for expectations section
-    what_to_expect = {
-        "before_your_trip": before_your_trip,
-        "on_arrival": on_arrival,
-        "quarantine_details": quarantine_details,
-        "travel_restrictions": travel_restrictions
-    }
-
-    # lists the countries under any lane agreements with this country
-    # null if no countries under this lane at this time
-    lanes = {
-        "green": [green],
-        "yellow": [yellow],
-        "red": [red]
-    }
-
-    article = { #making dict of the info.
-        "country": country, # country name
-        "new_cases": new_cases, # Number of new cases last 7 days
-        "new_increase": new_increase, # The % new increases in past 7 days
-        "active_cases": active_cases, 
-        "active_increase":active_increase, 
-        "can_you_enter": can_you_enter, # text
-        "what_to_expect": what_to_expect, # contains what_to_expect dictionary
-        "lanes": lanes,
-        "link": link,
-    }
-
-    countries_list.append(article) #appending the dicts into the list
-    if len(article) == 0: #stops the loop when it reaches the end
-        break
+        article = { #making dict of the info.
+            "country": country, # country name
+            "overview": overview, # open status and quarantine days
+            "new_cases": new_cases, # Number of new cases last 7 days
+            "new_increase": new_increase, # The % new increases in past 7 days
+            "active_cases": active_cases, 
+            "active_increase":active_increase, 
+            "can_you_enter": can_you_enter, # text
+            "what_to_expect": what_to_expect, # contains what_to_expect dictionary
+            "greenLanes": greenLanes,
+            "link": URL,
+        }
+        countries_list.append(article) #appending the dicts into the list
+        if len(article) == 0: #stops the loop when it reaches the end
+            break
 
 #print(countries_list) #debug
 
