@@ -9,6 +9,9 @@ import MapView from './components/map/mapView';
 import SearchBar from './components/searchBar/searchBar';
 import BadgesModal from './components/modal/BadgesModal';
 import TravelInfo from './components/travelinfo/travelInfo';
+import TrackerModal from './components/modal/TrackerModal';
+import TrackerButton from './components/footer/trakerButton';
+import BadgesButton from './components/footer/badgeButton';
 
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -16,6 +19,7 @@ import ReactTooltip from "react-tooltip";
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import BadgeButton from './components/footer/badgeButton';
 
 
 function App() {
@@ -26,6 +30,7 @@ function App() {
     const [numSearches, setNumSearches] = useState(0);
     const [numArticleClicks, setNumArticleClicks] = useState(0);
     const [travelInfo, setTravelInfo] = useState(null);
+    const [trackerOpen, setTrackerOpen] = useState(false);
 
     function incrementSearches() {
         var newNumSearches = numSearches + 1;
@@ -85,8 +90,9 @@ function App() {
                         <TravelInfo travelInfo={travelInfo}/>
                 </main>
 
-                <footer style={{width: "100%", height: "7%", bottom: "0", position: "fixed", paddingBottom: "10px"}}>
-                        <Footer openBadges={setBadgesOpen}/>
+                <footer className="footer" style={{height: "8%",  paddingRight: "6px"}}>
+                        <BadgeButton openBadges={setBadgesOpen}/>
+                        <TrackerButton openTracker={setTrackerOpen}/>
                 </footer>
                 
 
