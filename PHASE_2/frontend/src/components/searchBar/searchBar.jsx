@@ -81,7 +81,7 @@ const travelInfoFetch = (country, setTravelInfo) => {
 
     var searchTerm = normaliseCountry(country);
 
-    var url = `http://localhost:8000/travelinfo/?country=${searchTerm}`;
+    var url = `http://epidemicscraper-env.eba-t2stx6uv.us-east-1.elasticbeanstalk.com/travelinfo/?country=${searchTerm}`;
     console.log(url);
 
     return new Promise((resolve, reject) => {
