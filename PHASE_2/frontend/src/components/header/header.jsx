@@ -8,7 +8,7 @@ const Header = (props) => (
             src="https://www.inside.unsw.edu.au/sites/default/files/inline-images/crest.jpg"
             alt="1 Group 2 Group 3 Group 4"
         />
-            1 Group 2 Group 3 Group 4
+            Diseasy - The Epidemic Tracker
     </div>
 )
 
