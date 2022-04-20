@@ -2,7 +2,7 @@ import React from 'react';
 
 const ArticleContainer = ( {url, date, headline, main_text, reports} ) => {
     return (
-        <div className='article'>
+        <div className='article' >
             <h1>{headline}</h1>
             <h2>Date of publication: {date}</h2>
             <h2>Url: {url}</h2>

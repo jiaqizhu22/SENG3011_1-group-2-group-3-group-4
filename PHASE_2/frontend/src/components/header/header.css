@@ -8,6 +8,7 @@
   font-size: 20px;
   color: #282C34;
   position: sticky;
+  min-height: min-content;
   top: 0px;
 }
 
